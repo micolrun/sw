@@ -11,6 +11,7 @@
 - `index.html`: 사이트의 화면 구조
 - `styles.css`: 반응형 디자인
 - `app.js`: 자료 목록, 검색, 필터, 상세 보기
+- `favicon.svg`: 사이트 아이콘
 - `.github/workflows/pages.yml`: `main` 브랜치 변경 시 GitHub Pages 배포
 
 새 현장 자료는 `app.js`의 `articles` 목록에 제목, 분야, 대상 돈군, 요약, 점검 항목을 추가할 수 있습니다. 진단·치료 관련 내용은 전문가 검토 후 게시하는 것을 원칙으로 합니다.
