@@ -10,10 +10,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=sow-marker-above">
+  <link rel="stylesheet" href="styles.css?v=journey-health">
   <script src="app.js?v=handon" defer></script>
   <script src="daily-pig.js?v=2" defer></script>
-  <script src="growth-simulator.js?v=8" defer></script>
+  <script src="growth-simulator.js?v=9" defer></script>
   <script src="farm-weather.js?v=1" defer></script>
 </head>
 <body>
@@ -80,7 +80,7 @@
         <a class="text-link" href="course.html#chapter-2">생애주기 자세히 보기 <span aria-hidden="true">↗</span></a>
       </div>
       <div class="growth-visual">
-        <div class="growth-track"><span class="growth-track-fill" aria-hidden="true"></span><span class="growth-traveler" aria-hidden="true">🐽</span><input id="growth-picker" type="range" min="0" max="3" step="1" value="0" aria-label="돼지 성장 단계" aria-valuetext="포유자돈 · 출생부터 이유까지"></div>
+        <div class="growth-track"><span class="growth-track-fill" aria-hidden="true"></span><span class="growth-traveler" aria-hidden="true">🐽</span><input id="growth-picker" type="range" min="0" max="3" step="1" value="0" aria-label="돼지 성장 단계" aria-valuetext="포유자돈 · 출생부터 이유까지" aria-controls="growth-care journey-pig-health"></div>
         <ol class="growth-stages">
           <li><span class="growth-age">출생~이유</span><span class="growth-dot newborn"></span><strong>포유자돈</strong><b>약 1–2 → 6–8 kg</b><small>초유 · 보온 · 젖 먹기</small></li>
           <li><span class="growth-age">이유~약 60일</span><span class="growth-dot weaning"></span><strong>이유자돈</strong><b>약 6–8 → 20 kg</b><small>물 · 사료 적응</small></li>
@@ -101,7 +101,7 @@
           <div class="sow-timeline">
             <div class="growth-track">
               <span class="growth-track-fill" aria-hidden="true"></span><span class="growth-traveler" aria-hidden="true">🐽</span>
-              <input id="sow-cycle-picker" type="range" min="0" max="6" step="1" value="0" aria-label="모돈 생산주기 단계" aria-valuetext="분만" aria-controls="sow-cycle-care" aria-describedby="sow-cycle-help">
+              <input id="sow-cycle-picker" type="range" min="0" max="6" step="1" value="0" aria-label="모돈 생산주기 단계" aria-valuetext="분만" aria-controls="sow-cycle-care journey-sow-health" aria-describedby="sow-cycle-help">
             </div>
             <ol class="growth-stages sow-cycle" aria-label="모돈의 생산주기 순서">
               <li><span class="growth-age">주기의 시작</span><span class="growth-dot newborn"></span><strong>분만</strong><small>분만 기록 · 초유</small></li>
@@ -117,6 +117,44 @@
         <p id="sow-cycle-help" class="growth-picker-help">돼지코를 드래그하거나 방향키로 옮기면 단계별 관리 포인트가 표시됩니다.</p>
         <p id="sow-cycle-care" class="growth-care" aria-live="polite" aria-atomic="true"><strong>분만</strong> 모돈이 자돈을 낳는 시기입니다. 분만 시작 시각과 태어난 자돈 수를 기록하고, 자돈의 보온과 초유 섭취를 확인하세요.</p>
         <p class="sow-cycle-note">포유 28일, 이유 후 발정과 종부까지 약 5일, 임신 114일을 가정하면 분만에서 다음 분만까지 약 147일입니다. 실제 주기는 농장과 개체에 따라 달라집니다. <a href="https://ebook.qia.go.kr/src/viewer/main.php?category=1&amp;host=main&amp;page=23&amp;site=20220228_150245" target="_blank" rel="noopener noreferrer">검역본부 주간관리 예시 ↗</a></p>
+        <div class="farrowing-calculator" aria-labelledby="farrowing-calculator-title">
+          <h3 id="farrowing-calculator-title">분만 예정일 계산</h3>
+          <p>분만 예정일 = 종부일 + 114일</p>
+          <div class="farrowing-fields">
+            <label for="farrowing-service-date">종부일 <input id="farrowing-service-date" type="date"></label>
+            <div>예상 분만일 <output id="farrowing-due-date" for="farrowing-service-date" aria-live="polite">종부일을 선택해 주세요</output></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="journey-health" aria-labelledby="journey-health-title">
+        <div class="growth-heading">
+          <div><h2 id="journey-health-title">성장과 번식 단계별 주요 질병</h2><p>위 표에서 고른 단계가 강조됩니다. 단계별로 살펴볼 대표 질병과 징후입니다.</p></div>
+          <a class="text-link" href="course.html#chapter-7">질병관리 자세히 보기 <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="journey-health-grid">
+          <section aria-labelledby="journey-pig-health-title">
+            <h3 id="journey-pig-health-title">돼지의 성장 여정</h3>
+            <dl id="journey-pig-health" class="journey-health-list">
+              <div data-stages="0"><dt>포유자돈 <span class="journey-selected" hidden>선택한 단계</span></dt><dd><strong>대장균성 설사 · 로타바이러스성 장염</strong><p>묽은 변, 젖 먹는 힘 저하, 탈수 징후를 살펴보세요.</p></dd></div>
+              <div data-stages="1"><dt>이유자돈 <span class="journey-selected" hidden>선택한 단계</span></dt><dd><strong>이유 후 대장균성 설사</strong><p>이유 후 물설사, 음수·사료 섭취 감소, 활력 저하를 살펴보세요.</p></dd></div>
+              <div data-stages="2"><dt>육성돈 <span class="journey-selected" hidden>선택한 단계</span></dt><dd><strong>돼지 호흡기질병 복합체</strong><p>기침이나 호흡수 증가가 나타나는 돈방과 성장 정체가 있는 개체를 기록하세요.</p></dd></div>
+              <div data-stages="3"><dt>비육돈 <span class="journey-selected" hidden>선택한 단계</span></dt><dd><strong>증식성 장병증 · 발굽 손상과 파행</strong><p>설사나 혈변, 사료 섭취 감소, 절뚝거림을 살펴보세요.</p></dd></div>
+            </dl>
+            <p class="journey-health-sources">참고 <a href="https://www.merckvetmanual.com/digestive-system/enteric-bacterial-diseases-in-pigs/overview-of-enteric-bacterial-diseases-in-pigs">돼지 장질환</a> · <a href="https://www.merckvetmanual.com/digestive-system/enteric-viral-diseases-in-pigs/rotaviral-enteritis-in-pigs">로타바이러스성 장염</a> · <a href="https://www.merckvetmanual.com/respiratory-system/respiratory-diseases-of-pigs/overview-of-respiratory-diseases-of-pigs">호흡기질병</a> · <a href="https://www.merckvetmanual.com/musculoskeletal-system/lameness-in-pigs/lameness-in-growing-finishing-pigs">육성·비육돈 파행</a></p>
+          </section>
+          <section aria-labelledby="journey-sow-health-title">
+            <h3 id="journey-sow-health-title">모돈의 생산주기</h3>
+            <dl id="journey-sow-health" class="journey-health-list">
+              <div data-stages="0 6"><dt>분만 · 다음 분만 <span class="journey-selected" hidden>선택한 단계</span></dt><dd><strong>산후 유즙분비장애 증후군 · 자궁염</strong><p>분만 후 발열, 식욕 저하, 유즙 감소나 불쾌한 냄새가 나는 분비물을 살펴보세요.</p></dd></div>
+              <div data-stages="1"><dt>포유 <span class="journey-selected" hidden>선택한 단계</span></dt><dd><strong>유방염 · 유즙 감소</strong><p>유방이 뜨겁거나 붓는지, 자돈들이 젖을 먹고도 계속 보채는지 확인하세요.</p></dd></div>
+              <div data-stages="2 3 4"><dt>이유 · 발정 · 종부 <span class="journey-selected" hidden>선택한 단계</span></dt><dd><strong>발정 지연 · 무발정 · 종부 후 재발정</strong><p>번식 이상을 일찍 발견할 수 있도록 이유일, 발정 첫 관찰일과 종부일을 기록하세요.</p></dd></div>
+              <div data-stages="5"><dt>임신 <span class="journey-selected" hidden>선택한 단계</span></dt><dd><strong>돼지생식기호흡기증후군(PRRS) · 파보바이러스 감염증</strong><p>유산, 사산, 미라화 태아 또는 허약 자돈이 늘면 발생일과 모돈 번호를 기록하세요.</p></dd></div>
+            </dl>
+            <p class="journey-health-sources">참고 <a href="https://www.merckvetmanual.com/reproductive-system/postpartum-dysgalactia-syndrome-in-sows/postpartum-dysgalactia-syndrome-in-sows">산후 유즙분비장애</a> · <a href="https://www.merckvetmanual.com/reproductive-system/uterine-diseases-in-production-animals/overview-of-uterine-diseases-in-production-animals">자궁질환</a> · <a href="https://www.merckvetmanual.com/management-and-nutrition/management-of-reproduction-pigs/sow-and-gilt-management">모돈 번식관리</a> · <a href="https://www.merckvetmanual.com/reproductive-system/abortion-in-large-animals/abortion-in-pigs">모돈 유산과 번식장애</a></p>
+          </section>
+        </div>
+        <p class="journey-health-sources">비슷한 징후도 원인이 다를 수 있습니다. 이상 징후가 보이면 개체와 돈방, 발생 시각을 기록해 담당 수의사와 상의하세요.</p>
       </section>
     </section>
 

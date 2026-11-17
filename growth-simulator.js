@@ -113,3 +113,40 @@
   });
   render();
 })();
+
+for (const [pickerId, listId] of [
+  ['growth-picker', 'journey-pig-health'],
+  ['sow-cycle-picker', 'journey-sow-health']
+]) {
+  const picker = document.getElementById(pickerId);
+  const list = document.getElementById(listId);
+  if (!picker || !list) continue;
+  const rows = [...list.querySelectorAll('[data-stages]')];
+  function highlightStage() {
+    for (const row of rows) {
+      const active = row.dataset.stages.split(' ').includes(picker.value);
+      row.toggleAttribute('data-current-stage', active);
+      row.querySelector('.journey-selected').hidden = !active;
+    }
+  }
+  picker.addEventListener('input', highlightStage);
+  highlightStage();
+}
+
+(() => {
+  const serviceDate = document.querySelector('#farrowing-service-date');
+  const dueDate = document.querySelector('#farrowing-due-date');
+  if (!serviceDate || !dueDate) return;
+  const gestationDays = 114;
+  const millisecondsPerDay = 86400000;
+  const dateFormat = new Intl.DateTimeFormat('ko-KR', { dateStyle: 'long', timeZone: 'UTC' });
+  function calculate() {
+    const start = serviceDate.valueAsNumber;
+    dueDate.value = Number.isFinite(start)
+      ? dateFormat.format(start + gestationDays * millisecondsPerDay)
+      : '종부일을 선택해 주세요';
+  }
+  serviceDate.addEventListener('input', calculate);
+  serviceDate.addEventListener('change', calculate);
+  calculate();
+})();
