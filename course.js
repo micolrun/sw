@@ -165,41 +165,77 @@ function renderOverview(index, chapter) {
   </details>`;
 }
 
+const savedDabomQuote = { date: '2026-11-16', price: 5574 };
+const farmScaleInput = ['sows', '농장 규모 · 연평균 모돈 수', '두', 3000, 1, 1000000, 1];
 const sowInputs = [
   ['weaned', '복당 이유두수', '두', 10.25, 0, 30, 0.01],
   ['weaningAge', '이유일령', '일', 25, 1, 90, 1],
   ['survival', '이유 후 출하 비율', '%', 84.375, 0, 100, 0.001],
-  ['price', '돼지 도체 경락가', '원/kg', 5574, 0, 50000, 1],
+  ['price', '돼지 도체 경락가', '원/kg', savedDabomQuote.price, 0, 50000, 1],
   ['weight', '평균 도체중', 'kg/두', 88, 1, 200, 0.1],
   ['cost', '출하 1두당 전체 사육비', '원/두', 412000, 0, 2000000, 1],
   ['otherDays', '임신·포유 외 기간', '일/복', 28, 0, 365, 1]
 ];
 
-function sowProfit({ weaned, weaningAge, survival, price, weight, cost, otherDays }) {
+function sowProfit({ sows = 1, weaned, weaningAge, survival, price, weight, cost, otherDays }) {
   const litters = 365 / (114 + weaningAge + otherDays);
   const psy = litters * weaned;
   const msy = psy * survival / 100;
-  const revenue = msy * weight * price;
-  return { litters, psy, msy, revenue, cost: msy * cost, profit: revenue - msy * cost };
+  const shipped = sows * msy;
+  const revenue = shipped * weight * price;
+  const expenses = shipped * cost;
+  return { litters, psy, msy, weanedTotal: sows * psy, shipped, revenue,
+    cost: expenses, profit: revenue - expenses, breakEven: shipped ? cost / weight : null };
 }
 
 const sowNumber = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 });
 const sowMoney = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
+const koreanDate = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 
-function renderSowCalculator() {
+function showDabomQuote(status, quote) {
+  const today = koreanDate.format(new Date());
+  const label = quote.date === today ? '오늘 거래분' : '최근 공개 거래분';
+  status.textContent = `${label} ${quote.date} · ${sowMoney.format(quote.price)}원/kg`;
+}
+
+async function refreshDabomQuote(form, update) {
+  const status = document.querySelector('#sow-dabom-quote');
+  const price = form.elements.price;
+  showDabomQuote(status, savedDabomQuote);
+  let edited = false;
+  price.addEventListener('input', () => { edited = true; });
+  form.addEventListener('reset', () => { edited = false; });
+  try {
+    const response = await fetch('pig-price.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
+    if (!response.ok) throw new Error('Quote unavailable');
+    const quote = await response.json();
+    if (!/^20\d{2}-\d{2}-\d{2}$/.test(quote.date) || quote.date > koreanDate.format(new Date()) ||
+        quote.date < savedDabomQuote.date || !Number.isInteger(quote.price) ||
+        quote.price < 1 || quote.price > Number(price.max)) throw new Error('Invalid quote');
+    showDabomQuote(status, quote);
+    const manualValue = price.value;
+    price.defaultValue = String(quote.price);
+    price.value = edited ? manualValue : String(quote.price);
+    if (!edited) update();
+  } catch {
+    status.textContent = `마지막 확인 거래분 ${savedDabomQuote.date} · ${sowMoney.format(savedDabomQuote.price)}원/kg`;
+  }
+}
+
+function renderSowCalculator(isFarm, inputs) {
   return `<section class="lesson-block visual-lesson sow-calculator" aria-labelledby="sow-heading">
-    <h3 id="sow-heading">어미돼지 1마리, 1년 손익</h3>
-    <div class="sow-benchmark">
+    <h3 id="sow-heading">${isFarm ? '우리 농장 연간 손익 계산기' : '어미돼지 1마리, 1년 손익'}</h3>
+    ${isFarm ? '<p>연평균 모돈 수를 입력하면 농장 전체의 연간 성적을 계산합니다. 처음에는 모돈 3,000두와 다봄 시세를 적용한 예시가 표시됩니다.</p>' : `<div class="sow-benchmark">
       <strong>2025년 국내 자료로 환산하면 약 153만원</strong>
       <p>모돈당 연간 출하 18.9두 × 비육돈 1두당 순수익 81,000원 = 1,530,900원. 서로 다른 두 조사 수치를 곱한 참고 추정치입니다.</p>
       <a href="https://www.koreapork.or.kr/board/notice_view?Ncode=pignews&amp;number=51517">한돈팜스 출하두수 ↗</a>
       <a href="https://mods.go.kr/board.es?act=view&amp;bid=227&amp;list_no=445127&amp;mid=a10301080600">국가데이터처 순수익·사육비 ↗</a>
     </div>
-    <h4 class="picture-group-heading">우리 농장 조건으로 계산하기</h4>
-    <p>시세 기본값은 2026년 11월 16일 다봄 돼지 경락가 <strong>5,574원/kg</strong>입니다. 전국 등외·제주 제외 기준이며, <a href="https://www.ekapepia.com/v3/web/main.do?userGroup=producer">다봄에서 최근 시세 확인 ↗</a> 후 단가 칸에 입력할 수 있습니다.</p>
+    <h4 class="picture-group-heading">우리 농장 조건으로 계산하기</h4>`}
+    <p><strong id="sow-dabom-quote" aria-live="polite"></strong><br>다봄 전국 경락가(등외·제주 제외)를 하루 세 차례 확인합니다. 오늘 거래분이 게시되기 전에는 최근 공개 거래분으로 계산합니다. <a href="https://www.ekapepia.com/v3/web/main.do?userGroup=producer">다봄 시세 확인 ↗</a></p>
     <form id="sow-form">
       <div class="sow-inputs">
-        ${sowInputs.map(([name, label, unit, value, min, max, step]) => `<label>
+        ${inputs.map(([name, label, unit, value, min, max, step]) => `<label>
           <span>${label}</span><span class="sow-input-line">
             <input name="${name}" type="number" inputmode="${step === 1 ? 'numeric' : 'decimal'}"
               value="${value}" min="${min}" max="${max}" step="${step}" required><small>${unit}</small>
@@ -208,10 +244,13 @@ function renderSowCalculator() {
       <p id="sow-error" role="status" hidden>빈칸을 채우고 입력 범위와 소수 자릿수를 확인해 주세요.</p>
       <div class="sow-results" aria-live="polite" aria-atomic="true">
         <div class="sow-total"><span>입력 조건 기준 · 연간 예상 손익</span><strong data-sow="profit">—</strong></div>
+        ${isFarm ? `<div><span>농장 전체 연 이유두수</span><strong data-sow="weanedTotal">—</strong></div>
+        <div><span>농장 전체 연 출하두수</span><strong data-sow="shipped">—</strong></div>` : ''}
         <div><span>연 이유두수 · PSY</span><strong data-sow="psy">—</strong></div>
         <div><span>연 출하두수 · MSY</span><strong data-sow="msy">—</strong></div>
         <div><span>연 매출 추정</span><strong data-sow="revenue">—</strong></div>
         <div><span>연 사육비 추정</span><strong data-sow="cost">—</strong></div>
+        ${isFarm ? '<div><span>손익분기 경락가</span><strong data-sow="breakEven">—</strong></div>' : ''}
       </div>
       <button class="course-button" type="reset">기본값으로 돌아가기</button>
     </form>
@@ -220,7 +259,9 @@ function renderSowCalculator() {
       <ul>
         <li>연간 분만 횟수 = 365 ÷ (임신 114일 + 이유일령 + 임신·포유 외 일수). 현재 연 <strong id="sow-litters">—</strong>복.</li>
         <li>연 이유두수 = 연간 분만 횟수 × 복당 이유두수. 연 출하두수 = 연 이유두수 × 이유 후 출하 비율.</li>
+        ${isFarm ? '<li>농장 전체 이유·출하두수 = 연평균 모돈 수 × 모돈 1두당 연간 이유·출하두수입니다.</li>' : ''}
         <li>연 손익 = 연 출하두수 × (평균 도체중 × 경락가 − 출하 1두당 전체 사육비).</li>
+        ${isFarm ? '<li>손익분기 경락가 = 출하 1두당 전체 사육비 ÷ 도체중. 출하가 0두이면 표시하지 않습니다.</li>' : ''}
       </ul>
       <p>번식 기본값은 한돈팜스 PSY 22.4두·MSY 18.9두에 가깝게 맞춘 모델 가정입니다. 임신·포유 외 기간에는 이유 후 교배까지와 번식 지연에 해당하는 기간이 들어갑니다. 이유일령을 바꾸면 분만 횟수가 바뀝니다. 이유두수·출하 비율·사육비에도 변화가 있다면 해당 값을 따로 조정하세요.</p>
       <p>도체중 88kg은 교육용 가정입니다. 사육비 기본값은 2025년 조사 비육돈 1두당 412,000원입니다. 경락가로 구한 매출은 거래처 정산·수수료를 반영하기 전 추정치입니다. 출하를 기준으로 나눈 농장 전체 사육비를 입력하면 모돈 비용의 이중 계산을 피할 수 있습니다.</p>
@@ -228,7 +269,7 @@ function renderSowCalculator() {
   </section>`;
 }
 
-function setupSowCalculator() {
+function setupSowCalculator(inputs) {
   const form = document.querySelector('#sow-form');
   const error = document.querySelector('#sow-error');
   const outputs = form.querySelectorAll('[data-sow]');
@@ -236,12 +277,16 @@ function setupSowCalculator() {
   function update() {
     const valid = form.checkValidity();
     error.hidden = valid;
-    const values = Object.fromEntries(sowInputs.map(([name]) => [name, form.elements[name].valueAsNumber]));
+    const values = Object.fromEntries(inputs.map(([name]) => [name, form.elements[name].valueAsNumber]));
     const results = valid ? sowProfit(values) : {};
     for (const output of outputs) {
       const key = output.dataset.sow;
-      const isCount = key === 'psy' || key === 'msy';
-      output.textContent = valid ? (isCount ? sowNumber.format(results[key]) + '두' : sowMoney.format(results[key]) + '원') : '—';
+      const isCount = ['psy', 'msy', 'weanedTotal', 'shipped'].includes(key);
+      const unit = isCount ? '두' : key === 'breakEven' ? '원/kg' : '원';
+      const format = key === 'psy' || key === 'msy' ? sowNumber : sowMoney;
+      output.textContent = valid && results[key] !== null
+        ? format.format(results[key]) + unit
+        : '—';
     }
     litters.textContent = valid ? sowNumber.format(results.litters) : '—';
   }
@@ -249,6 +294,7 @@ function setupSowCalculator() {
   form.addEventListener('reset', () => queueMicrotask(update));
   form.addEventListener('submit', event => event.preventDefault());
   update();
+  refreshDabomQuote(form, update);
 }
 
 const motionObserver = typeof IntersectionObserver === 'function' ? new IntersectionObserver(entries => {
@@ -262,6 +308,8 @@ const motionObserver = typeof IntersectionObserver === 'function' ? new Intersec
 function renderLesson(index) {
   const chapter = chapters[index];
   const visualChapter = index === 1 || index === 2;
+  const farmCalculator = index === 11;
+  const calculatorInputs = farmCalculator ? [farmScaleInput, ...sowInputs] : sowInputs;
   motionObserver?.disconnect();
   renderNavigation(index);
   lesson.innerHTML = `
@@ -270,7 +318,7 @@ function renderLesson(index) {
       <h2>${chapter.title}</h2>
       <p>${chapter.why}</p>
     </header>
-    ${index === 8 ? renderSowCalculator() : ''}
+    ${index === 8 || farmCalculator ? renderSowCalculator(farmCalculator, calculatorInputs) : ''}
     ${visualChapter ? renderVisualChapter(index, chapter) : renderOverview(index, chapter)}
     <section class="lesson-block"><h3>국내 현장 사례</h3><p>${chapter.case}</p></section>
     <section class="lesson-block"><h3>현장 체크리스트</h3><ul class="course-checks">
@@ -298,7 +346,7 @@ function renderLesson(index) {
       ${index < chapters.length - 1 ? `<a class="course-button next" href="#chapter-${index + 2}">다음 장 →</a>` : '<a class="course-button next" href="#glossary">용어사전 →</a>'}
     </nav>`;
 
-  if (index === 8) setupSowCalculator();
+  if (index === 8 || farmCalculator) setupSowCalculator(calculatorInputs);
   if (motionObserver && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     lesson.querySelectorAll('[data-course-motion]').forEach(figure => motionObserver.observe(figure));
   }

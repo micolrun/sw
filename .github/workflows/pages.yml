@@ -3,6 +3,9 @@ name: Deploy site to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    # 10:47, 16:47 and 19:47 Korea Standard Time.
+    - cron: '47 1,7,10 * * *'
   workflow_dispatch:
 
 permissions:
@@ -27,6 +30,8 @@ jobs:
         run: |
           mkdir dist
           cp index.html styles.css app.js course.html course.css course-data.js course.js farm-layout.png favicon.svg .nojekyll dist/
+      - name: Refresh Dabom pig carcass quote
+        run: node scripts/update-pig-price.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
