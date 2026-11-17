@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=journey-health-inline">
+  <link rel="stylesheet" href="styles.css?v=disease-guide">
   <script src="app.js?v=handon" defer></script>
   <script src="daily-pig.js?v=2" defer></script>
   <script src="growth-simulator.js?v=10" defer></script>
@@ -93,13 +93,14 @@
       <aside class="journey-health" aria-labelledby="journey-health-title">
         <h3 id="journey-health-title">주의해야 할 질병</h3>
         <dl id="journey-pig-health" class="journey-health-list" aria-live="polite" aria-atomic="true">
-          <div data-stages="0"><dt>포유자돈</dt><dd><strong>대장균성 설사 · 로타바이러스성 장염</strong><p>묽은 변, 젖 먹는 힘 저하, 탈수 징후를 살펴보세요.</p></dd></div>
-          <div data-stages="1" hidden><dt>이유자돈</dt><dd><strong>이유 후 대장균성 설사</strong><p>이유 후 물설사, 음수·사료 섭취 감소, 활력 저하를 살펴보세요.</p></dd></div>
-          <div data-stages="2" hidden><dt>육성돈</dt><dd><strong>돼지 호흡기질병 복합체</strong><p>기침이나 호흡수 증가가 나타나는 돈방과 성장 정체가 있는 개체를 기록하세요.</p></dd></div>
-          <div data-stages="3" hidden><dt>비육돈</dt><dd><strong>증식성 장병증 · 발굽 손상과 파행</strong><p>설사나 혈변, 사료 섭취 감소, 절뚝거림을 살펴보세요.</p></dd></div>
+          <div data-stages="0" data-topic="gut"><dt>포유자돈</dt><dd><ul><li><strong>돼지유행성설사(PED)</strong><p>포유자돈 여러 마리에서 물설사나 구토가 갑자기 나타나는지 보고, 활력이 떨어지는 자돈을 확인하세요.</p></li><li><strong>대장균성 설사 · 로타바이러스성 장염</strong><p>묽은 변, 젖 빠는 힘 저하와 탈수 징후를 살펴보세요.</p></li></ul></dd></div>
+          <div data-stages="1" hidden data-topic="gut"><dt>이유자돈</dt><dd><ul><li><strong>이유 후 대장균성 설사</strong><p>젖을 뗀 뒤 물설사가 시작된 날과 해당 돈방의 마릿수를 기록하세요.</p></li><li><strong>살모넬라증</strong><p>설사와 함께 발열이나 식욕 저하가 나타나는지 확인하세요.</p></li></ul></dd></div>
+          <div data-stages="2" hidden data-topic="lung"><dt>육성돈</dt><dd><ul><li><strong>돼지 호흡기질병 복합체(PRDC)</strong><p>기침이 늘거나 성장이 더딘 돈방을 살펴보세요. PRRS 등 여러 질병이 관여할 수 있습니다.</p></li><li><strong>돼지 흉막폐렴(APP)</strong><p>갑작스러운 고열이나 호흡곤란, 폐사가 보이면 담당 수의사에게 바로 알리세요.</p></li></ul></dd></div>
+          <div data-stages="3" hidden data-topic="gut"><dt>비육돈</dt><dd><ul><li><strong>증식성 장병증(회장염)</strong><p>설사가 지속되거나 증체가 떨어지는지 살피고, 혈변이 보인 개체는 따로 기록하세요.</p></li><li><strong>발굽 손상과 파행</strong><p>절뚝거리거나 한쪽 다리에 체중을 덜 싣는 개체를 살펴보세요.</p></li></ul></dd></div>
         </dl>
         <details class="journey-health-reference">
-          <summary>참고자료</summary>
+          <summary>피그앤포크 기사와 참고자료</summary>
+          <p class="journey-health-sources"><a href="https://www.pignpork.com/news/articleView.html?idxno=20107">포유자돈과 PED</a> · <a href="https://www.pignpork.com/news/articleView.html?idxno=19920">비육돈과 회장염</a> · <a href="https://ebook.qia.go.kr/src/viewer/main.php?category=1&amp;host=main&amp;page=224&amp;site=20251107_085110">검역본부 세균성 질병 편람</a> · <a href="https://www.woah.org/en/disease/porcine-epidemic-diarrhoea/">WOAH 돼지유행성설사</a></p>
           <p class="journey-health-sources">참고 <a href="https://www.merckvetmanual.com/digestive-system/enteric-bacterial-diseases-in-pigs/overview-of-enteric-bacterial-diseases-in-pigs">돼지 장질환</a> · <a href="https://www.merckvetmanual.com/digestive-system/enteric-viral-diseases-in-pigs/rotaviral-enteritis-in-pigs">로타바이러스성 장염</a> · <a href="https://www.merckvetmanual.com/respiratory-system/respiratory-diseases-of-pigs/overview-of-respiratory-diseases-of-pigs">호흡기질병</a> · <a href="https://www.merckvetmanual.com/musculoskeletal-system/lameness-in-pigs/lameness-in-growing-finishing-pigs">육성·비육돈 파행</a></p>
           <a href="course.html#chapter-7">질병관리 교육과정 ↗</a>
         </details>
@@ -133,13 +134,14 @@
         <aside class="journey-health" aria-labelledby="journey-sow-health-title">
           <h3 id="journey-sow-health-title">주의해야 할 질병·번식 이상</h3>
           <dl id="journey-sow-health" class="journey-health-list" aria-live="polite" aria-atomic="true">
-            <div data-stages="0 6"><dt>분만 · 다음 분만</dt><dd><strong>산후 유즙분비장애 증후군 · 자궁염</strong><p>분만 후 발열, 식욕 저하, 유즙 감소나 불쾌한 냄새가 나는 분비물을 살펴보세요.</p></dd></div>
-            <div data-stages="1" hidden><dt>포유</dt><dd><strong>유방염 · 유즙 감소</strong><p>유방이 뜨겁거나 붓는지, 자돈들이 젖을 먹고도 계속 보채는지 확인하세요.</p></dd></div>
-            <div data-stages="2 3 4" hidden><dt>이유 · 발정 · 종부</dt><dd><strong>발정 지연 · 무발정 · 종부 후 재발정</strong><p>번식 이상을 일찍 발견할 수 있도록 이유일, 발정 첫 관찰일과 종부일을 기록하세요.</p></dd></div>
-            <div data-stages="5" hidden><dt>임신</dt><dd><strong>돼지생식기호흡기증후군(PRRS) · 파보바이러스 감염증</strong><p>유산, 사산, 미라화 태아 또는 허약 자돈이 늘면 발생일과 모돈 번호를 기록하세요.</p></dd></div>
+            <div data-stages="0 6" data-topic="nursing"><dt>분만 · 다음 분만</dt><dd><ul><li><strong>산후 유즙분비장애 증후군</strong><p>분만 직후 젖이 줄어 자돈들이 계속 보채거나, 모돈의 식욕이 떨어지는지 살펴보세요.</p></li><li><strong>자궁염</strong><p>발열과 함께 냄새가 심한 분비물이 보이면 분만 시점과 징후를 기록해 담당 수의사에게 알리세요.</p></li></ul></dd></div>
+            <div data-stages="1" hidden data-topic="nursing"><dt>포유</dt><dd><ul><li><strong>유방염 · 유즙 감소</strong><p>유방이 뜨겁거나 붓는지, 자돈이 젖을 먹고도 자주 보채는지 함께 살펴보세요.</p></li></ul></dd></div>
+            <div data-stages="2 3 4" hidden data-topic="breeding"><dt>이유 · 발정 · 종부</dt><dd><ul><li><strong>발정 지연 · 무발정 · 종부 후 재발정</strong><p>이유일과 첫 발정 확인일, 종부일을 기록해 평소보다 늦거나 다시 발정이 오는 모돈을 확인하세요.</p></li></ul></dd></div>
+            <div data-stages="5" hidden data-topic="breeding"><dt>임신</dt><dd><ul><li><strong>돼지생식기호흡기증후군(PRRS)</strong><p>유산, 조산, 사산 또는 허약 자돈이 늘면 해당 모돈과 발생일을 기록하세요.</p></li><li><strong>돼지 파보바이러스 감염증</strong><p>같은 복에서 미라화 태아와 살아 있는 자돈이 함께 나오는지 기록해 수의사에게 전달하세요.</p></li></ul></dd></div>
           </dl>
           <details class="journey-health-reference">
-            <summary>참고자료</summary>
+            <summary>피그앤포크 기사와 참고자료</summary>
+            <p class="journey-health-sources"><a href="https://www.pignpork.com/news/articleView.html?idxno=20190">PRRS 관리</a> · <a href="https://www.woah.org/app/uploads/2021/03/prrs-guide-web-bulletin.pdf">WOAH PRRS 자료</a></p>
             <p class="journey-health-sources">참고 <a href="https://www.merckvetmanual.com/reproductive-system/postpartum-dysgalactia-syndrome-in-sows/postpartum-dysgalactia-syndrome-in-sows">산후 유즙분비장애</a> · <a href="https://www.merckvetmanual.com/reproductive-system/uterine-diseases-in-production-animals/overview-of-uterine-diseases-in-production-animals">자궁질환</a> · <a href="https://www.merckvetmanual.com/management-and-nutrition/management-of-reproduction-pigs/sow-and-gilt-management">모돈 번식관리</a> · <a href="https://www.merckvetmanual.com/reproductive-system/abortion-in-large-animals/abortion-in-pigs">모돈 유산과 번식장애</a></p>
             <a href="course.html#chapter-7">질병관리 교육과정 ↗</a>
           </details>

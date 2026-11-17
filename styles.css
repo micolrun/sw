@@ -230,8 +230,27 @@
 }
 .journey-health h3 { margin: 0 0 6px; font-size: 14px; color: #77452f; }
 .journey-health-list { margin: 0; }
+.journey-health-list > div:not([hidden]) {
+  display: grid;
+  grid-template-columns: clamp(76px, 18vw, 132px) minmax(0, 1fr);
+  align-items: start;
+  column-gap: 14px;
+}
+.journey-health-list [data-topic]::before {
+  content: '';
+  grid-row: 1 / span 2;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 9px;
+  background: url('assets/journey-disease-guide.png') 0 0 / 200% 200%;
+}
+.journey-health-list [data-topic="lung"]::before { background-position: 100% 0; }
+.journey-health-list [data-topic="nursing"]::before { background-position: 0 100%; }
+.journey-health-list [data-topic="breeding"]::before { background-position: 100% 100%; }
 .journey-health-list dt { font-size: 12px; font-weight: 800; color: #654d3e; }
 .journey-health-list dd { margin: 2px 0 0; }
+.journey-health-list dd ul { list-style: none; padding: 0; margin: 0; }
+.journey-health-list dd li + li { margin-top: 7px; padding-top: 7px; border-top: 1px solid #e9d8c8; }
 .journey-health-list dd strong { font-size: 14px; }
 .journey-health-list dd p { margin: 3px 0 0; color: #486655; font-size: 13px; }
 .journey-health-reference { margin-top: 8px; color: #486655; font-size: 12px; }
