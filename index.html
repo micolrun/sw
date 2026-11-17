@@ -10,12 +10,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=daily-pig-20261117">
+  <link rel="stylesheet" href="styles.css?v=mechanisms-20261117">
   <script src="app.js?v=handon" defer></script>
   <script src="assets/three.bundle.min.js" defer></script>
   <script src="daily-pig.js?v=1" defer></script>
   <script src="pig-3d.js?v=3" defer></script>
-  <script src="growth-simulator.js?v=2" defer></script>
+  <script src="growth-simulator.js?v=3" defer></script>
   <script src="farm-weather.js?v=1" defer></script>
 </head>
 <body>
@@ -122,6 +122,7 @@
         <div class="lab-world" data-weather="unknown"><span class="lab-cloud cloud-one"></span><span class="lab-cloud cloud-two"></span><div class="lab-ground"></div><img id="lab-pig" src="assets/pig-suckling.svg" alt="" width="400" height="260"><span class="lab-stage" id="lab-stage">포유자돈</span></div>
         <div class="lab-weather"><div><strong>현재 위치의 외부 날씨</strong><span id="weather-reading" role="status">위치 확인 중…</span><small id="weather-time">돈사 내부 온도·습도는 별도로 측정하세요.</small><small>기상 모델 기반 현재값 · <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a></small><button type="button" id="weather-gps">현재 위치 사용</button></div><form id="weather-form"><label for="weather-search">또는 지역 검색</label><div><input id="weather-search" type="search" placeholder="예: 파주" minlength="2" required><button type="submit">검색</button></div><select id="weather-results" aria-label="검색 결과에서 지역 선택" hidden></select><button type="button" id="weather-apply" hidden>이 지역 선택</button></form></div>
         <div class="lab-observation" aria-live="polite"><span>가상 관찰 사례</span><h4 id="lab-case-title">젖을 먹는지 살펴보기</h4><p id="lab-case">태어난 자돈이 모돈 곁에서 젖을 찾습니다. 한 마리가 뒤처지지는 않는지 확인해 보세요.</p><strong>이렇게 확인해요</strong><p id="lab-action">초유 섭취와 보온 공간을 확인하고, 활력이 떨어지는 자돈은 담당 수의사와 상의합니다.</p><a id="lab-link" href="course.html#chapter-2">관련 교육 내용 보기 ↗</a></div>
+        <section class="disease-mechanism" aria-labelledby="mechanism-title"><span class="mechanism-kicker">그림으로 이해하는 질병과 건강 문제</span><h4 id="mechanism-title">포유자돈 · 로타바이러스성 장염</h4><p id="mechanism-intro">해당 시기에 배울 수 있는 별도 예시입니다.</p><ol class="mechanism-flow" id="mechanism-flow"></ol><p class="mechanism-note">단계별 학습을 위한 예시이며 위 가상 관찰 사례의 원인을 확정한 것이 아닙니다. 비슷한 증상에도 원인이 다를 수 있습니다.</p><a id="mechanism-source" href="https://www.merckvetmanual.com/" target="_blank" rel="noopener noreferrer">근거 자료 보기 ↗</a></section>
       </div>
       <div class="care-grid">
         <article class="care-card care-breeding"><div class="care-scene" aria-hidden="true"><span class="care-sun">✳</span><span class="care-hill"></span><img src="assets/baby-pig.svg" alt=""><span class="care-object">🌿</span></div><div class="care-content"><span class="stage-num">01 / BREEDING</span><h3>번식돈</h3><p>건강한 모돈이 다음 세대의 출발점입니다.</p><ul><li>체형과 사료 섭취를 살피고 급이량을 조절합니다.</li><li>발정·교배·임신 기록을 개체별로 확인합니다.</li><li>분만 전 돈방을 청소하고 분만 준비를 점검합니다.</li></ul><a href="course.html#chapter-6">번식관리 배우기 ↗</a></div></article>
