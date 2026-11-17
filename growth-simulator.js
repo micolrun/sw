@@ -122,15 +122,13 @@ for (const [pickerId, listId] of [
   const list = document.getElementById(listId);
   if (!picker || !list) continue;
   const rows = [...list.querySelectorAll('[data-stages]')];
-  function highlightStage() {
+  function showStageHealth() {
     for (const row of rows) {
-      const active = row.dataset.stages.split(' ').includes(picker.value);
-      row.toggleAttribute('data-current-stage', active);
-      row.querySelector('.journey-selected').hidden = !active;
+      row.hidden = !row.dataset.stages.split(' ').includes(picker.value);
     }
   }
-  picker.addEventListener('input', highlightStage);
-  highlightStage();
+  picker.addEventListener('input', showStageHealth);
+  showStageHealth();
 }
 
 (() => {
