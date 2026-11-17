@@ -80,3 +80,27 @@
   picker.addEventListener('input', render);
   render();
 })();
+
+(() => {
+  const buttons = [...document.querySelectorAll('.sow-cycle button')];
+  const care = document.querySelector('#sow-cycle-care');
+  if (!care || !buttons.length) return;
+
+  const points = [
+    ['분만', '모돈이 자돈을 낳는 시기입니다. 분만 시작 시각과 태어난 자돈 수를 기록하고, 자돈의 보온과 초유 섭취를 확인하세요.'],
+    ['포유 · 약 3~4주', '모돈이 자돈에게 젖을 먹이는 기간입니다. 모돈의 물과 사료 섭취, 체형과 유방 상태를 살피고 자돈이 젖을 잘 먹고 자라는지 확인하세요.'],
+    ['이유 · 젖을 떼는 날', '자돈을 모돈과 분리합니다. 이유 날짜, 자돈 수와 모돈의 체형 상태를 기록하고, 모돈의 식욕과 유방 상태를 관찰하세요.'],
+    ['발정 · 이유 후 약 4~6일', '이유 후 다시 발정이 오는 시기입니다. 모돈이 등을 눌렀을 때 가만히 서는 반응 등 발정 징후와 처음 확인한 시각을 기록하세요.'],
+    ['종부 · 발정 확인 후', '발정이 확인된 모돈에 교배 또는 인공수정을 실시하는 단계입니다. 모돈 번호와 종부 시각, 웅돈 또는 정액 정보를 기록하세요.'],
+    ['임신 · 종부 후 평균 114일', '종부 후 임신 여부와 재발정을 확인하고, 임신 중에는 체형과 사료 섭취를 살피세요. 분만 예정일에 맞춰 분만사를 준비합니다.'],
+    ['다음 분만 · 새 주기의 시작', '분만 예정일을 확인하고 깨끗한 분만 공간과 자돈 보온 구역을 준비하세요. 자돈이 태어나면 분만 기록을 남기고 다시 포유 단계로 들어갑니다.']
+  ];
+
+  buttons.forEach((button, index) => button.addEventListener('click', () => {
+    const [stage, advice] = points[index];
+    buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    const heading = document.createElement('strong');
+    heading.textContent = stage;
+    care.replaceChildren(heading, advice);
+  }));
+})();
