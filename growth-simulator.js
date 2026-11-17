@@ -31,7 +31,7 @@
     title.textContent = item.title; detail.textContent = item.detail; action.textContent = item.action;
     link.href = `course.html#chapter-${item.chapter}`;
     const imageStage = day <= 21 ? 'suckling' : day <= 60 ? 'nursery' : day <= 120 ? 'growing' : 'finishing';
-    if (pig.dataset.stage !== imageStage) { pig.src = `assets/pig-${imageStage}.svg`; pig.dataset.stage = imageStage; }
+    if (pig.dataset.stage !== imageStage) { pig.src = `assets/pig-${imageStage}-v2.png`; pig.dataset.stage = imageStage; }
     const mechanism = mechanisms[imageStage];
     document.querySelector('#mechanism-title').textContent = mechanism.title;
     document.querySelector('#mechanism-intro').textContent = mechanism.intro;

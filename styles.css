@@ -86,3 +86,14 @@
   .news-digest .text-link{justify-self:start}
   .digest-grid{grid-template-columns:1fr}
 }
+
+/* Layered farm illustration for the growth simulation. */
+.lab-world,.lab-world[data-weather=clear],.lab-world[data-weather=unknown]{background:linear-gradient(#ffffff05,#183e2508),url('assets/farm-scene-v2.png') center/cover no-repeat}
+.lab-world[data-weather=cloudy],.lab-world[data-weather=fog]{background:linear-gradient(#6b83884a,#314d3a24),url('assets/farm-scene-v2.png') center/cover no-repeat}
+.lab-world[data-weather=rain],.lab-world[data-weather=storm]{background:linear-gradient(#344f6570,#293e3d55),url('assets/farm-scene-v2.png') center/cover no-repeat}
+.lab-world[data-weather=snow]{background:linear-gradient(#deeff28a,#e7f4f066),url('assets/farm-scene-v2.png') center/cover no-repeat}
+.lab-world:before,.lab-world .lab-ground,.lab-world .lab-cloud{display:none}
+.lab-world img{width:300px;max-width:76%;height:auto;max-height:220px;object-fit:contain;margin-bottom:25px;filter:drop-shadow(0 12px 8px #352c2366)}
+.care-scene{height:175px;background:linear-gradient(#ffffff14,#214f2524),url('assets/farm-scene-v2.png') center/cover no-repeat!important}
+.care-scene .care-hill,.care-scene .care-sun{display:none}.care-scene img,.care-suckling .care-scene img,.care-nursery .care-scene img{height:145px;width:94%;object-fit:contain;filter:drop-shadow(0 8px 5px #47392855)}.care-scene .care-object{right:8%;bottom:13px;font-size:22px}
+@media(max-width:600px){.lab-world img{width:245px;max-height:180px}.care-scene{height:140px}.care-scene img,.care-suckling .care-scene img,.care-nursery .care-scene img{height:115px}}
