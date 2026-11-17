@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173b35">
+  <meta name="description" content="양돈산업의 기초부터 스마트축산과 경영 실무까지 배우는 12장 웹 교재">
+  <title>양돈 교육과정 | SW 양돈 현장 인사이트</title>
+  <link rel="icon" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="course.css">
+  <script src="course-data.js" defer></script>
+  <script src="course.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#lesson">본문 바로가기</a>
+  <header class="site-header">
+    <div class="wrap course-header">
+      <a class="course-brand" href="index.html"><span class="brand-icon">SW</span><span>양돈 현장 인사이트</span></a>
+      <nav aria-label="교육과정 바로가기"><a href="#course-outline">목차</a><a href="#glossary">용어사전</a></nav>
+    </div>
+  </header>
+  <main>
+    <section class="course-hero">
+      <div class="wrap course-hero-grid">
+        <div>
+          <p class="course-label">SW 양돈 교육과정</p>
+          <h1>양돈의 기초부터<br><em>농장 실무까지</em></h1>
+          <p>한 마리의 성장에서 농장 한 곳의 경영까지.<br>입문자와 현장 실무자를 위한 12장 웹 교재입니다.</p>
+          <a class="btn btn-light" href="#chapter-1">1장부터 시작하기 <span aria-hidden="true">→</span></a>
+        </div>
+        <figure class="course-roadmap" aria-label="교육과정 로드맵">
+          <a href="#chapter-1"><span>01–03</span><strong>산업과 농장</strong><small>공급망 · 생애주기 · 시설</small></a>
+          <a href="#chapter-4"><span>04–06</span><strong>사육과 번식</strong><small>환경 · 사료 · 모돈</small></a>
+          <a href="#chapter-7"><span>07–09</span><strong>건강과 성적</strong><small>질병 · 방역 · 생산지표</small></a>
+          <a href="#chapter-10"><span>10–12</span><strong>기술과 경영</strong><small>스마트축산 · 악취 · 손익</small></a>
+        </figure>
+      </div>
+    </section>
+    <div class="wrap course-layout" id="course-outline">
+      <aside class="course-sidebar">
+        <h2>교육과정 목차</h2>
+        <p id="course-progress" aria-live="polite"></p>
+        <nav id="chapter-nav" aria-label="장별 목차"></nav>
+      </aside>
+      <article id="lesson" tabindex="-1" aria-label="선택한 장의 학습 내용"></article>
+      <noscript><p>웹 교재를 읽으려면 브라우저에서 자바스크립트를 켜 주세요.</p></noscript>
+    </div>
+    <section class="wrap glossary" id="glossary">
+      <h2>용어사전</h2>
+      <label for="glossary-search">용어 또는 뜻 검색</label>
+      <input id="glossary-search" type="search" placeholder="예시: PSY, 이유, 체중">
+      <dl id="glossary-list"></dl>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap footer-inner"><a href="index.html">← 양돈 현장 인사이트</a><a href="#">맨 위로 ↑</a></div></footer>
+</body>
+</html>
