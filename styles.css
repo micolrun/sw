@@ -108,7 +108,7 @@
 .pig-stage-illustrated[data-mood=water],
 .pig-stage-illustrated[data-mood=feed] { --pig-tilt: 5deg; }
 @media (prefers-reduced-motion: no-preference) {
-  .pig-stage-illustrated .pig-illustration { animation: hero-pig-breathe 4.2s ease-in-out 1; }
+  .pig-stage-illustrated .pig-illustration { animation: hero-pig-breathe 4.2s ease-in-out infinite; }
   @keyframes hero-pig-breathe {
     50% { transform: translateY(calc(var(--pig-rise, 0px) - 7px)) rotate(var(--pig-tilt, 0deg)) scaleY(calc(var(--pig-posture, 1) + .025)); }
   }
@@ -133,3 +133,5 @@
     50% { rotate: 1.6deg; }
   }
 }
+
+.pig-quiz-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:12px}.pig-quiz-controls input,.pig-quiz-controls button{border:1px solid #cee4d1;border-radius:8px;padding:6px 10px;background:#f4f7eb;color:#173b35}.pig-quiz-controls input{width:128px}.pig-quiz-controls button:disabled{opacity:.55}

@@ -10,9 +10,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=barn-walk">
+  <link rel="stylesheet" href="styles.css?v=pig-quiz">
   <script src="app.js?v=handon" defer></script>
-  <script src="daily-pig.js?v=1" defer></script>
+  <script src="daily-pig.js?v=2" defer></script>
   <script src="growth-simulator.js?v=4" defer></script>
   <script src="farm-weather.js?v=1" defer></script>
 </head>
@@ -55,7 +55,9 @@
           <div class="hero-note"><span class="note-line"></span> 현장 활용 · 근거 중심 · 지속 업데이트</div>
           <section class="daily-pig-lesson" aria-labelledby="daily-pig-title">
             <div class="daily-pig-label">오늘의 질문 · 가상 돼지 <time id="daily-pig-date"></time></div>
-            <div class="daily-dialog"><div class="dialog-question"><span>🐷 돼지의 질문</span><h2 id="daily-pig-title">오늘은 무엇을 살펴볼까요?</h2><p id="daily-pig-observation">가상 돼지의 상태를 살펴보세요.</p></div><details class="dialog-answer"><summary>답변 듣기</summary><span>💬 함께 살펴봐요</span><p id="daily-pig-action"></p><a id="daily-pig-link" href="course.html">관련 교육 살펴보기 ↗</a></details></div>
+            <form id="pig-name-form" class="pig-quiz-controls"><label for="pig-name">돼지 이름</label><input id="pig-name" maxlength="20" placeholder="아기돼지"><button>저장</button><small id="pig-name-status" role="status"></small></form>
+            <div class="pig-quiz-controls"><button type="button" id="pig-prev">이전 질문</button><span id="pig-count" aria-live="polite"></span><button type="button" id="pig-next">다음 질문</button></div>
+            <div class="daily-dialog"><div class="dialog-question"><span>🐷 <span id="pig-name-display">아기돼지</span>의 질문</span><h2 id="daily-pig-title">오늘은 무엇을 살펴볼까요?</h2><p id="daily-pig-observation">가상 돼지의 상태를 살펴보세요.</p></div><details class="dialog-answer"><summary>답변 듣기</summary><span>💬 함께 살펴봐요</span><p id="daily-pig-action"></p><a id="daily-pig-link" href="course.html">관련 교육 살펴보기 ↗</a></details></div>
             <small>교육용 가상 사례입니다. 증상만으로 질병을 진단할 수 없으며, 이상이 있으면 담당 수의사와 상의하세요.</small>
           </section>
         </div>

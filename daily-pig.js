@@ -9,15 +9,28 @@
     { mood:'tired', icon:'✚', tag:'걸음 관찰', title:'절뚝거리면 어떻게 살필까요?', observation:'가상 돼지가 한쪽 다리를 조심스럽게 디디고 있습니다. 원인은 다리나 발굽, 바닥 상태 등 다양합니다.', action:'발생 시각과 개체, 발굽과 바닥 상태를 살피고 담당 수의사에게 관찰 내용을 전달합니다.', chapter:7 }
   ];
   const parts = new Intl.DateTimeFormat('en-US', { timeZone:'Asia/Seoul', year:'numeric', month:'2-digit', day:'2-digit' });
-  let lastDay = '';
-  function update() {
-    const p = Object.fromEntries(parts.formatToParts(new Date()).filter(x => x.type !== 'literal').map(x => [x.type,x.value]));
-    const day = `${p.year}-${p.month}-${p.day}`;
-    if (day === lastDay) return;
-    lastDay = day;
-    const serial = Math.floor(Date.UTC(+p.year, +p.month - 1, +p.day) / 86400000);
-    const item = cases[((serial % cases.length) + cases.length) % cases.length];
-    document.querySelector('#daily-pig-date').textContent = `${p.year}.${p.month}.${p.day}`;
+  const more = [
+    ['warm','돈사 온도는 어디서 재나요?','벽의 온도계와 자돈이 누운 자리의 온도가 다릅니다.','돼지 높이와 실제로 머무는 자리에서 측정하고, 행동과 함께 기록합니다.',4],
+    ['feed','사료를 바꿀 때 무엇을 기록할까요?','새 사료가 들어온 뒤 섭취량을 비교하려고 합니다.','변경 날짜와 돈군, 섭취량과 분변 변화를 기록합니다.',5],
+    ['water','물 사용량이 늘면 무엇부터 볼까요?','급수 기록이 어제보다 크게 올랐습니다.','누수 여부와 실제 음수 행동을 확인하고 이전 기록과 비교합니다.',5],
+    ['tired','활력이 떨어진 돼지는 어떻게 기록할까요?','한 마리가 평소보다 덜 움직입니다.','개체와 돈방, 처음 본 시간, 섭취·호흡의 변화를 기록해 수의사와 상의합니다.',7],
+    ['bright','증상이 있는 돼지 수는 어떻게 셀까요?','옆 돈방에서도 비슷한 변화가 보입니다.','돈방별 전체 마릿수와 증상이 보인 마릿수를 따로 적습니다.',7],
+    ['bright','차량과 작업자의 동선을 왜 나눌까요?','출하차와 작업자가 같은 길을 쓰고 있습니다.','농장 밖에서 들어오는 차량과 내부 작업 동선이 교차하는 곳을 찾아 방역 기준에 맞게 관리합니다.',8],
+    ['bright','사료효율을 비교할 때 무엇을 맞출까요?','두 돈군의 사료 사용량을 비교합니다.','같은 기간의 사료 사용량과 체중 증가를 함께 비교하고 돈군 범위를 확인합니다.',9],
+    ['bright','센서 경보가 울리면 무엇을 할까요?','온도 센서에서 경보가 왔습니다.','돈방의 실제 온도와 설비 상태를 확인하고 조치 내용을 기록합니다.',10],
+    ['bright','시설 배치도에서 무엇을 표시할까요?','농장의 이동 경로를 처음 그립니다.','작업자와 돼지, 차량의 이동 경로와 인계 지점을 표시합니다.',3]
+  ].map(([mood,title,observation,action,chapter]) => ({mood,title,observation,action,chapter}));
+  const groups = [[cases[3],cases[4],cases[5],...more.slice(0,3)],
+    [cases[0],cases[1],cases[2],cases[6],...more.slice(3,5)], more.slice(5)];
+  let lastDay = '', questions = [], index = 0;
+  const prev = document.querySelector('#pig-prev');
+  const next = document.querySelector('#pig-next');
+  function render() {
+    const item = questions[index];
+    document.querySelector('#pig-count').textContent = `${index + 1} / ${questions.length}`;
+    prev.disabled = index === 0;
+    next.disabled = index === questions.length - 1;
+    document.querySelector('.dialog-answer').open = false;
     document.querySelector('#daily-pig-title').textContent = item.title;
     document.querySelector('#daily-pig-observation').textContent = item.observation;
     document.querySelector('#daily-pig-action').textContent = item.action;
@@ -25,6 +38,35 @@
     document.querySelector('.pig-stage').dataset.mood = item.mood;
     window.dispatchEvent(new CustomEvent('daily-pig-change', { detail: item }));
   }
+  function update() {
+    const p = Object.fromEntries(parts.formatToParts(new Date()).map(({type,value}) => [type,value]));
+    const day = `${p.year}-${p.month}-${p.day}`;
+    if (day === lastDay) return;
+    lastDay = day;
+    const serial = Date.parse(day) / 86400000;
+    questions = groups.flatMap((group, i) =>
+      Array.from({length: i === 2 ? 1 : 2}, (_, offset) => group[((serial * 2 + Math.floor(serial / 3) + offset) % group.length + group.length) % group.length]));
+    index = 0;
+    document.querySelector('#daily-pig-date').textContent = day;
+    render();
+  }
+  prev.onclick = () => { if (index > 0) { index--; render(); } };
+  next.onclick = () => { if (index < questions.length - 1) { index++; render(); } };
+  const name = document.querySelector('#pig-name');
+  const display = document.querySelector('#pig-name-display');
+  const status = document.querySelector('#pig-name-status');
+  const storageKey = 'sw-pig-name';
+  try { name.value = localStorage.getItem(storageKey) || ''; } catch {}
+  display.textContent = name.value || '아기돼지';
+  document.querySelector('#pig-name-form').addEventListener('submit', event => {
+    event.preventDefault();
+    name.value = name.value.trim();
+    display.textContent = name.value || '아기돼지';
+    try {
+      localStorage.setItem(storageKey, name.value);
+      status.textContent = name.value ? '이 브라우저에 저장했습니다.' : '기본 이름으로 돌아갔습니다.';
+    } catch { status.textContent = '브라우저에 저장할 수 없습니다.'; }
+  });
   update();
   window.setInterval(update, 60000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) update(); });
