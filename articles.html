@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="피그앤포크 양돈 기사 요약과 현장 점검 포인트">
+  <title>양돈 기사 모음 | 대한동물약품 양돈컨설팅</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="article-library.css">
+  <script src="article-library-data.js" defer></script>
+  <script src="article-library.js" defer></script>
+</head>
+<body class="article-library">
+  <a class="skip-link" href="#articles">본문 바로가기</a>
+  <header class="reading-header">
+    <div class="wrap">
+      <a class="reading-home" href="index.html">← 대한동물약품 양돈컨설팅</a>
+      <nav class="reading-nav" aria-label="기사 모음">
+        <a href="?topic=field" data-topic="field">현장실전 테크닉</a>
+        <a href="?topic=business" data-topic="business">양돈경영</a>
+        <a href="?topic=feed" data-topic="feed">사료·영양</a>
+        <a href="?topic=health" data-topic="health">질병·사양관리</a>
+        <a href="?topic=care" data-topic="care">사양관리</a>
+        <a href="?topic=research" data-topic="research">집중연구</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap reading-main" id="articles">
+    <div class="reading-intro">
+      <h1 id="reading-title">양돈 기사 모음</h1>
+      <p id="reading-scope"></p>
+      <a id="reading-source" href="https://www.pignpork.com/" target="_blank" rel="noopener noreferrer">피그앤포크 전체 기사 목록 ↗</a>
+    </div>
+    <div class="reading-filters" hidden>
+      <label for="reading-search">기사 검색<input id="reading-search" type="search" placeholder="제목이나 요약 검색"></label>
+      <label for="reading-category">분야<select id="reading-category"><option value="">전체 분야</option></select></label>
+      <p id="reading-count" role="status"></p>
+    </div>
+    <div id="reading-grid" class="reading-grid"></div>
+    <p id="reading-empty" hidden>조건에 맞는 기사가 없습니다.</p>
+    <noscript><p>카드를 보려면 자바스크립트를 켜 주세요.</p></noscript>
+  </main>
+  <template id="reading-card">
+    <article class="reading-card">
+      <div class="reading-art" aria-hidden="true" hidden></div>
+      <div class="reading-card-body">
+        <span class="reading-category"></span>
+        <h2></h2>
+        <p></p>
+        <a target="_blank" rel="noopener noreferrer">피그앤포크 원문 ↗</a>
+      </div>
+    </article>
+  </template>
+</body>
+</html>

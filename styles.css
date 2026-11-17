@@ -272,3 +272,7 @@
   .growth-stages strong { font-size: 12px; }
   .growth-stages b, .growth-stages small, .growth-age { font-size: 10px; }
 }
+
+.reading-shortcuts { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.reading-shortcuts a { padding: 6px 12px; border: 1px solid currentColor; border-radius: 999px; font-size: 12px; font-weight: 800; }
+.reading-shortcuts a:hover { text-decoration: underline; text-underline-offset: 3px; }
