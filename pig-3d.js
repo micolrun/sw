@@ -31,7 +31,12 @@
     const eyes = [-.56,.56].map(x => { const e = new T.Group(); e.position.set(x,.13,.83); head.add(e); ball(e,eye,0,0,0,.15,.2,.095); ball(e,white,-.04,.07,.09,.048,.06,.025); return e; });
     ball(head,snout,0,-.35,.92,.58,.39,.3);
     ball(head,nostril,-.21,-.34,1.2,.085,.14,.035); ball(head,nostril,.21,-.34,1.2,.085,.14,.035);
-    const smile = new T.Mesh(new T.TorusGeometry(.18,.025,8,32,Math.PI),nostril); smile.position.set(0,-.79,.83); smile.rotation.z=Math.PI; head.add(smile);
+    const smileCurve = new T.QuadraticBezierCurve3(
+      new T.Vector3(-.20,-.80,.75),
+      new T.Vector3(0,-.92,.72),
+      new T.Vector3(.20,-.80,.75)
+    );
+    head.add(new T.Mesh(new T.TubeGeometry(smileCurve, 24, .022, 8, false), nostril));
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     const resize = () => { const w=stage.clientWidth,h=stage.clientHeight; if(!w||!h)return; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); renderer.render(scene,camera); };
     let visible = true, frame = 0;
