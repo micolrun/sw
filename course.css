@@ -66,6 +66,29 @@
 .course-quiz summary,.course-details summary{cursor:pointer;font-weight:700}
 .course-quiz p{padding-top:6px}
 .course-details a{color:#245a45;text-decoration:underline}
+.visual-lesson h3{font-size:clamp(24px,4vw,34px);margin-bottom:16px}
+.picture-group-heading{font-size:21px;margin:23px 0 10px;letter-spacing:-.035em}
+.picture-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;list-style:none;padding:0;margin:0}
+.picture-card{padding:17px 15px 15px;border:1px solid #cadccf;border-radius:13px;background:#eef6ee;word-break:keep-all}
+.picture-card svg{width:52px;height:52px;padding:8px;border-radius:12px;background:#dbeadc;color:#255640;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.picture-card h4{margin:12px 0 4px;font-size:clamp(20px,2.4vw,25px);line-height:1.22;letter-spacing:-.045em}
+.picture-card strong{display:block;font-size:17px;line-height:1.4}
+.picture-card p{margin:5px 0 0;color:#34534a;font-size:15px;line-height:1.5}
+.breeding-cards .picture-card{background:#faf2e6;border-color:#ebd7bb}
+.breeding-cards svg{background:#f3e4cf;color:#71491e}
+.visual-lesson .picture-caption{margin:15px 0 0;font-size:14px}
+.farm-hero-map{margin:0;border:1px solid #cadccf;border-radius:14px;background:#edf4ed;overflow:hidden}
+.farm-hero-map>a{display:block}
+.farm-hero-map>a:focus-visible{outline-offset:-4px}
+.farm-hero-map img{display:block;width:100%;height:auto}
+.farm-hero-map figcaption{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;flex-wrap:wrap}
+.farm-hero-map figcaption strong{display:block;font-size:20px;letter-spacing:-.045em}
+.farm-hero-map figcaption small{display:block;color:#3d5b50;font-size:14px}
+.farm-hero-map .course-button{min-height:44px;font-size:15px}
+.reference-routes{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:13px 0 0}
+.reference-routes li{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:750;border-radius:7px;padding:5px 9px;background:#f2f5f0}
+.reference-routes li::before{content:'';width:15px;height:4px;background:var(--route);border-radius:4px}
+.course-details .course-figure:first-of-type{margin-top:14px}
 .lesson-actions{display:flex;flex-wrap:wrap;gap:8px}
 .course-button{display:inline-flex;align-items:center;background:white;border:1px solid #a8bcaa;border-radius:8px;padding:8px 12px;color:var(--ink);font-size:13px;font-weight:750}
 .course-button:hover{background:#eaf3e7}
@@ -84,6 +107,11 @@
   .course-layout{padding-block:24px;gap:16px}
   .course-sidebar{position:static;max-height:none}
   #chapter-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .picture-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .picture-card{padding:12px 9px}
+  .picture-card svg{width:46px;height:46px}
 }
 @media print{
   .site-header,.course-hero,.course-sidebar,.glossary,.footer,.skip-link,.lesson-actions,.lesson-block:not(.lesson-summary),#print-summary{display:none}

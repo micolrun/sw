@@ -69,8 +69,83 @@ function renderChart([name, unit, values]) {
       <strong>${value.toFixed(1)}</strong></li>`).join('')}</ul></figure>`;
 }
 
+const cardIcons = {
+  pig: '<path d="M8 13 6 5l9 4a17 17 0 0 1 10 0l9-4-2 8a13 13 0 0 1 4 9c0 8-7 13-16 13S4 30 4 22a13 13 0 0 1 4-9Z"/><ellipse cx="20" cy="25" rx="8" ry="5"/><path d="M17 25h.1m5.9 0h.1M13 18h.1m13.9 0h.1"/>',
+  calendar: '<rect x="6" y="9" width="28" height="26" rx="4"/><path d="M6 17h28M13 5v8m14-8v8m-14 13 5 4 9-9"/>',
+  heart: '<path d="M20 34 7 21A8 8 0 0 1 20 12a8 8 0 0 1 13 9Z"/><path d="M12 22h5l3-5 3 5h5"/>',
+  bottle: '<path d="M16 11V8l2-4h4l2 4v3m-9 5-3 5v11a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V21l-3-5m-12-4h14v4H13zm5 12h4m-4 5h4"/>',
+  feed: '<path d="M5 23h30l-6 11H11Zm5 0 5-8h10l5 8M20 15V6m0 5c4 0 6-2 7-5m-7 5c-4 0-6-2-7-5"/>',
+  scale: '<rect x="5" y="8" width="30" height="26" rx="5"/><path d="M11 22a9 9 0 0 1 18 0Zm9 0 4-5"/>',
+  truck: '<path d="M4 11h20v18H4zM24 17h7l5 6v6H24"/><circle cx="11" cy="30" r="4"/><circle cx="29" cy="30" r="4"/>',
+  barn: '<path d="m4 17 16-9 16 9M7 16v18h26V16M15 34V22h10v12m-5-17h.1"/>',
+  shield: '<path d="M20 5 34 11v8c0 8-5 12-14 16C11 31 6 27 6 19v-8Z"/><path d="m13 20 5 5 9-10"/>',
+  water: '<path d="M20 5C15 13 9 19 9 25a11 11 0 0 0 22 0c0-6-6-12-11-20Z"/><path d="M14 25c0 3 2 5 5 6"/>'
+};
+
+const lifeCards = [
+  ['후보돈', '첫 교배 준비', '체형과 다리 상태 확인', 'pig'],
+  ['교배', '발정 확인 후', '교배 시각 기록', 'heart'],
+  ['임신', '약 114일', '임신 확인·체형 관리', 'calendar'],
+  ['분만', '태어날 때 1~2kg', '초유·보온 확인', 'pig'],
+  ['포유', '약 3~4주', '젖 먹는지 확인', 'bottle'],
+  ['이유', '생후 21~28일', '물과 사료 섭취 확인', 'feed'],
+  ['육성', '약 20~60kg', '체중과 환기 확인', 'scale'],
+  ['비육', '약 60~115kg', '사료 사용량 확인', 'feed'],
+  ['출하', '약 110~115kg', '휴약기간과 체중 확인', 'truck']
+];
+
+const facilityCards = [
+  ['관리동·방역실', '사람이 들어오는 곳', '샤워 후 작업복과 장화 교체', 'shield'],
+  ['격리사', '새로 들어온 돼지', '기존 돼지와 떨어져 관찰', 'shield'],
+  ['후보돈사·임신사', '번식 준비와 임신', '체형과 임신 상태 확인', 'calendar'],
+  ['분만사', '출산과 젖 먹이기', '새끼가 따뜻한지 확인', 'bottle'],
+  ['자돈사·육성사·비육사', '젖 뗀 뒤 출하까지', '사료·물·체중 확인', 'barn'],
+  ['사료빈·출하대', '사료 반입과 돼지 인계', '외부 차량과 만나는 곳 확인', 'truck'],
+  ['저장조·퇴비사', '분뇨 저장과 처리', '분뇨 작업 동선 분리', 'water']
+];
+
+function renderPictureCards(cards, theme) {
+  return `<ol class="picture-grid ${theme}">${cards.map(([title, metric, action, icon]) =>
+    `<li class="picture-card">
+      <svg viewBox="0 0 40 40" aria-hidden="true">${cardIcons[icon]}</svg>
+      <h4>${title}</h4><strong>${metric}</strong><p>${action}</p>
+    </li>`).join('')}</ol>`;
+}
+
+function renderVisualChapter(index, chapter) {
+  const life = index === 1;
+  return `<section class="lesson-block visual-lesson">
+    <h3>${life ? '성장 단계 한눈에 보기' : '농장 구조 한눈에 보기'}</h3>
+    ${life ? `<h4 class="picture-group-heading">모돈의 번식</h4>
+      ${renderPictureCards(lifeCards.slice(0, 3), 'breeding-cards')}
+      <h4 class="picture-group-heading">자돈의 성장과 출하</h4>
+      ${renderPictureCards(lifeCards.slice(3), 'growth-cards')}
+      <p class="picture-caption">분만 후 모돈은 포유·이유를 거쳐 다음 번식을 준비합니다. 일령과 체중은 교육용 대표값입니다.</p>` :
+      `<figure class="farm-hero-map">
+        <a href="farm-layout.png" target="_blank" rel="noopener noreferrer" aria-label="재래식 증축형 양돈장 배치도 원본을 새 탭에서 크게 보기">
+          <img src="farm-layout.png" width="1536" height="1024" alt="항공사진형 양돈장 구조도. 아래쪽에 주출입구와 방역실, 중앙에 번식·분만 시설, 왼쪽에 자돈·육성·비육 시설, 오른쪽 위에 분뇨 처리시설이 배치되어 있습니다.">
+        </a>
+        <figcaption><div><strong>재래식·증축형 양돈장</strong><small>첨부 예시 · 모돈 3,000두 기준</small></div>
+          <a class="course-button" href="farm-layout.png" target="_blank" rel="noopener noreferrer">그림 크게 보기 ↗</a>
+        </figcaption>
+      </figure>
+      <ul class="reference-routes" aria-label="첨부 구조도 동선 범례">
+        <li style="--route:#b53029">돼지</li><li style="--route:#1b5b9e">사람</li><li style="--route:#2b7135">사료</li>
+        <li style="--route:#a84d08">분뇨</li><li style="--route:#222">출하 차량</li>
+      </ul>
+      <h4 class="picture-group-heading">시설별로 하는 일</h4>
+      ${renderPictureCards(facilityCards, 'facility-cards')}`}
+  </section>
+  <details class="lesson-block course-details"><summary>${life ? '단계별 체중·일령·질병 자세히 보기' : '시설 역할표와 다른 농장 배치 보기'}</summary>
+    ${renderTable(chapter.tables)}
+    ${life ? '' : `<p class="course-note">동시 사육 3,000두 배치도는 농장 전체 돼지를 셉니다. 위 항공사진형 예시의 3,000두는 어미돼지 수입니다.</p>
+      ${chapter.maps.map(renderMap).join('')}`}
+  </details>`;
+}
+
 function renderLesson(index) {
   const chapter = chapters[index];
+  const visualChapter = index === 1 || index === 2;
   renderNavigation(index);
   lesson.innerHTML = `
     <header class="lesson-heading">
@@ -78,7 +153,7 @@ function renderLesson(index) {
       <h2>${chapter.title}</h2>
       <p>${chapter.why}</p>
     </header>
-    <section class="lesson-block"><h3>개념과 실무</h3>
+    ${visualChapter ? renderVisualChapter(index, chapter) : `<section class="lesson-block"><h3>개념과 실무</h3>
       ${chapter.learn.split('\n').map(line => {
         const [level, body] = line.split(' | ');
         return `<p><strong class="course-level">${level}</strong> ${body}</p>`;
@@ -90,7 +165,7 @@ function renderLesson(index) {
       ${(chapter.flows || []).map(renderFlow).join('')}
       ${(chapter.maps || []).map(renderMap).join('')}
       ${chapter.chart ? renderChart(chapter.chart) : ''}
-    </section>
+    </section>`}
     <section class="lesson-block"><h3>국내 현장 사례</h3><p>${chapter.case}</p></section>
     <section class="lesson-block"><h3>현장 체크리스트</h3><ul class="course-checks">
       ${chapter.check.map(text => `<li><label><input type="checkbox"> ${text}</label></li>`).join('')}
