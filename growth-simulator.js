@@ -57,3 +57,26 @@
   }));
   render();
 })();
+
+(() => {
+  const picker = document.querySelector('#growth-picker');
+  if (!picker) return;
+  const care = document.querySelector('#growth-care');
+  const points = [
+    ['신생자돈 · 출생', '초유를 먹는지 확인하고, 자돈이 따뜻하고 건조한 곳에서 쉬는지 살펴보세요.'],
+    ['이유자돈 · 21–28일', '급수기가 잘 나오는지 확인하고, 자돈이 물을 마시고 새 사료를 먹는지 살펴보세요.'],
+    ['육성돈 · 약 60–120일', '체중과 사료 섭취를 기록하고, 돈방의 환기와 돼지 높이에서 느껴지는 바람을 확인하세요.'],
+    ['비육돈 · 약 120–180일', '출하 기준에 맞는 체중인지 확인하고, 걷는 상태와 약품 휴약기간을 점검하세요.']
+  ];
+  const render = () => {
+    const index = Number(picker.value);
+    const [stage, advice] = points[index];
+    picker.parentElement.style.setProperty('--growth-position', String(index / 3 * 100) + '%');
+    picker.setAttribute('aria-valuetext', stage);
+    const heading = document.createElement('strong');
+    heading.textContent = stage;
+    care.replaceChildren(heading, advice);
+  };
+  picker.addEventListener('input', render);
+  render();
+})();

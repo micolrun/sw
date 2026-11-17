@@ -10,10 +10,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=pig-quiz">
+  <link rel="stylesheet" href="styles.css?v=growth-picker">
   <script src="app.js?v=handon" defer></script>
   <script src="daily-pig.js?v=2" defer></script>
-  <script src="growth-simulator.js?v=4" defer></script>
+  <script src="growth-simulator.js?v=5" defer></script>
   <script src="farm-weather.js?v=1" defer></script>
 </head>
 <body>
@@ -81,7 +81,7 @@
         <a class="text-link" href="course.html#chapter-2">생애주기 자세히 보기 <span aria-hidden="true">↗</span></a>
       </div>
       <div class="growth-visual">
-        <div class="growth-track" aria-hidden="true"><span class="growth-track-fill"></span><span class="growth-traveler">🐽</span></div>
+        <div class="growth-track"><span class="growth-track-fill" aria-hidden="true"></span><span class="growth-traveler" aria-hidden="true">🐽</span><input id="growth-picker" type="range" min="0" max="3" step="1" value="0" aria-label="돼지 성장 단계" aria-valuetext="신생자돈 · 출생"></div>
         <ol class="growth-stages">
           <li><span class="growth-age">출생</span><span class="growth-dot newborn"></span><strong>신생자돈</strong><b>약 1–2 kg</b><small>초유 · 보온</small></li>
           <li><span class="growth-age">21–28일</span><span class="growth-dot weaning"></span><strong>이유자돈</strong><b>약 6–8 kg</b><small>물 · 사료 적응</small></li>
@@ -89,6 +89,8 @@
           <li><span class="growth-age">약 120–180일</span><span class="growth-dot finisher"></span><strong>비육돈</strong><b>약 60–110 kg</b><small>출하 준비</small></li>
         </ol>
       </div>
+      <p class="growth-picker-help">돼지코를 드래그하거나 방향키로 옮겨 보세요.</p>
+      <p id="growth-care" class="growth-care" aria-live="polite"><strong>신생자돈 · 출생</strong> 초유를 먹는지 확인하고, 자돈이 따뜻하고 건조한 곳에서 쉬는지 살펴보세요.</p>
       <p class="growth-note"><span aria-hidden="true">ⓘ</span> 교육용 대표 범위입니다. 실제 체중과 일령은 품종, 사료 프로그램, 농장 관리와 출하 기준에 따라 달라질 수 있습니다.</p>
     </section>
 
