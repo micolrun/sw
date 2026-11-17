@@ -46,13 +46,18 @@
     card.querySelector('.reading-visual-caption').textContent = caption;
 
     const outline = card.querySelector('.reading-outline');
+    const pointSummaries = articlePointSummaries[id];
     outline.querySelector('summary').textContent = '핵심 항목 ' + points.length + '개';
-    outline.querySelector('ul').append(...points.map(point => {
+    outline.querySelector('ul').append(...points.map((point, index) => {
       const item = document.createElement('li');
-      item.textContent = point;
+      const title = document.createElement('h3');
+      title.textContent = point;
+      const description = document.createElement('p');
+      description.textContent = pointSummaries[index];
+      item.append(title, description);
       return item;
     }));
-    return {card, field, text: [field, heading, summary, caption, ...points].join(' ').toLocaleLowerCase('ko')};
+    return {card, field, text: [field, heading, summary, caption, ...points, ...pointSummaries].join(' ').toLocaleLowerCase('ko')};
   });
   grid.append(...cards.map(({card}) => card));
 
