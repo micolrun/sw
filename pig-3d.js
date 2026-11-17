@@ -38,13 +38,26 @@
     );
     head.add(new T.Mesh(new T.TubeGeometry(smileCurve, 24, .022, 8, false), nostril));
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const resize = () => { const w=stage.clientWidth,h=stage.clientHeight; if(!w||!h)return; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); renderer.render(scene,camera); };
+    function pose(t) {
+      const mood = stage.dataset.mood || 'bright';
+      const quiet = mood === 'tired' || mood === 'cough';
+      const moving = !reduced.matches;
+      const sway = moving ? Math.sin(t*.75) : 0;
+      pig.rotation.y=.16*sway;
+      pig.rotation.z=(quiet ? -.09 : 0)+(moving ? .035*Math.sin(t*1.05) : 0);
+      pig.position.y=moving ? (quiet ? .02 : .06)*Math.sin(t*2) : 0;
+      head.rotation.z=(quiet ? -.11 : mood === 'water' || mood === 'feed' ? .09 : 0)+(moving ? .035*Math.sin(t*1.1) : 0);
+      const blink=moving ? Math.max(.08,1-Math.pow(Math.max(0,Math.sin(t*1.3)),40)) : 1;
+      eyes.forEach(e=>e.scale.y=blink*(quiet ? .55 : 1));
+    }
+    const resize = () => { const w=stage.clientWidth,h=stage.clientHeight; if(!w||!h)return; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); pose(0); renderer.render(scene,camera); };
     let visible = true, frame = 0;
-    const draw = ms => { if (!visible || reduced.matches) { frame=0; return; } const t=ms/1000; pig.rotation.y=.16*Math.sin(t*.75); pig.rotation.z=.035*Math.sin(t*1.05); pig.position.y=.06*Math.sin(t*2); head.rotation.z=.035*Math.sin(t*1.1); const blink=Math.max(.08,1-Math.pow(Math.max(0,Math.sin(t*1.3)),40)); eyes.forEach(e=>e.scale.y=blink); renderer.render(scene,camera); frame=requestAnimationFrame(draw); };
+    const draw = ms => { if (!visible || reduced.matches) { frame=0; return; } pose(ms/1000); renderer.render(scene,camera); frame=requestAnimationFrame(draw); };
     const start = () => { resize(); if(visible && !reduced.matches && !frame) frame=requestAnimationFrame(draw); };
     new ResizeObserver(resize).observe(stage);
     if ('IntersectionObserver' in window) new IntersectionObserver(entries => { visible=entries[0].isIntersecting; if(!visible && frame){cancelAnimationFrame(frame);frame=0;} else start(); }).observe(stage);
     reduced.addEventListener('change',()=>{ if(frame){cancelAnimationFrame(frame);frame=0;} eyes.forEach(e=>e.scale.y=1); start(); });
+    window.addEventListener('daily-pig-change', resize);
     resize(); stage.classList.add('pig-ready'); start();
   } catch (_) { /* The illustration remains available when WebGL is unavailable. */ }
 })();

@@ -24,6 +24,8 @@
     stage.textContent = `${day}일령 · ${item.stage}`;
     title.textContent = item.title; detail.textContent = item.detail; action.textContent = item.action;
     link.href = `course.html#chapter-${item.chapter}`;
+    const imageStage = day <= 21 ? 'suckling' : day <= 60 ? 'nursery' : day <= 120 ? 'growing' : 'finishing';
+    if (pig.dataset.stage !== imageStage) { pig.src = `assets/pig-${imageStage}.svg`; pig.dataset.stage = imageStage; }
     pig.style.setProperty('--pig-size', String(.48 + .52 * Math.sqrt((day - 1) / 179)));
   }
   // One simulated day passes every two calendar days in Korea; the cycle restarts after 180 days.
