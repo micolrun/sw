@@ -181,11 +181,16 @@
 .sow-cycle { grid-template-columns: repeat(7, minmax(0, 1fr)); }
 .sow-timeline .growth-track {
   inset-inline: calc(100% / 14);
-  top: 28.5px;
+  top: 68.5px;
 }
-.sow-timeline .growth-traveler { z-index: 3; }
+.sow-timeline .growth-traveler {
+  top: -24px;
+  z-index: 3;
+}
 #sow-cycle-picker {
   appearance: none;
+  top: -48px;
+  height: 83px;
   z-index: 4;
 }
 #sow-cycle-picker::-webkit-slider-thumb {
@@ -198,7 +203,7 @@
   height: 44px;
   border: 0;
 }
-.sow-cycle .growth-dot { pointer-events: none; }
+.sow-cycle .growth-dot { margin-top: 49px; pointer-events: none; }
 .sow-cycle [data-selected] strong { color: #246047; text-decoration: underline; text-underline-offset: 3px; }
 .sow-cycle-note { margin: 12px 0 0; font-size: 12px; color: #486655; }
 .sow-cycle-note a { text-decoration: underline; text-underline-offset: 2px; }
