@@ -5,7 +5,7 @@
 /* A more expressive, responsive growth infographic and a gently animated mascot. */
 .daily-dialog{display:grid;gap:9px;margin:10px 0}.dialog-question,.dialog-answer{padding:12px 15px;border-radius:15px}.dialog-question{background:#f4f7eb;color:#214638;border-bottom-left-radius:4px}.dialog-question span,.dialog-answer span{font-size:10px;font-weight:800;color:#44815a}.hero .dialog-question p{color:#456755}.hero .dialog-question h2{color:#173b35}.dialog-answer{background:#ffffff18;border:1px solid #ffffff28;border-bottom-right-radius:4px}.dialog-answer summary{color:#f8e3bf}.dialog-answer span{color:#b7dcb9}.dialog-answer[open] summary{padding-bottom:12px}
 .lab-weather{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:20px;padding:18px 36px;background:#e3f0e2;border-top:1px solid #d0e2d0}.lab-weather strong,.lab-weather span,.lab-weather small{display:block}.lab-weather strong{font-size:13px}.lab-weather span{font-size:14px;font-weight:800;color:#246443;margin-top:3px}.lab-weather small{font-size:10px;color:#627a6c;margin-top:4px}.lab-weather a{text-decoration:underline}.lab-weather form label{display:block;font-size:11px;font-weight:800;margin-bottom:4px}.lab-weather form div{display:flex;gap:5px}.lab-weather input,.lab-weather select{min-width:0;width:150px;padding:7px;border:1px solid #bfd6c1;border-radius:8px;background:white;color:#244a38;font:inherit;font-size:12px}.lab-weather select{display:block;margin-top:6px}.lab-weather select[hidden]{display:none}.lab-weather button{border:1px solid #b9d2bf;border-radius:8px;background:#fff;padding:7px 10px;font:inherit;font-size:11px;font-weight:800;color:#2d6948}.lab-weather #weather-gps{margin-top:8px}.lab-weather #weather-apply{margin-top:6px}.lab-world[data-weather=cloudy]{background:linear-gradient(#aabec2,#dce8db)}.lab-world[data-weather=fog]{background:linear-gradient(#becac5,#e9ede0)}.lab-world[data-weather=rain]{background:linear-gradient(#819fae,#cadad1)}.lab-world[data-weather=storm]{background:linear-gradient(#6c8490,#aebfba)}.lab-world[data-weather=snow]{background:linear-gradient(#b8d1df,#eef5f4)}.lab-world[data-weather=rain]:after,.lab-world[data-weather=storm]:after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(110deg,transparent 0 22px,#ffffff70 23px 25px,transparent 26px 47px);pointer-events:none}.lab-world[data-weather=snow]:after{content:'❄　❅　❄　❅　❄';position:absolute;inset:18px 0 auto;text-align:center;color:#fff;font-size:24px;letter-spacing:12px;pointer-events:none}.lab-world[data-weather=cloudy]:before,.lab-world[data-weather=rain]:before,.lab-world[data-weather=storm]:before,.lab-world[data-weather=fog]:before{opacity:.2}.hero[data-weather=rain],.hero[data-weather=storm]{background:radial-gradient(circle at 72% 41%,#355b5a,#173a39 65%,#11302f)}.hero[data-weather=snow]{background:radial-gradient(circle at 72% 41%,#527875,#244c48 65%,#143735)}
-@media(prefers-reduced-motion:no-preference){.lab-world img{animation:lab-pig-breathe 3.8s ease-in-out infinite}@keyframes lab-pig-breathe{0%,100%{transform:scale(var(--pig-size,.48)) translateY(0)}50%{transform:scale(var(--pig-size,.48)) translateY(-5px)}}}@media(max-width:600px){.lab-weather{grid-column:auto;grid-template-columns:1fr;padding:18px 25px;gap:12px}.lab-weather input{width:190px;max-width:65vw}}
+@media(max-width:600px){.lab-weather{grid-column:auto;grid-template-columns:1fr;padding:18px 25px;gap:12px}.lab-weather input{width:190px;max-width:65vw}}
 .daily-pig-lesson{max-width:530px;margin-top:26px;padding:18px 20px;border:1px solid #ffffff38;border-radius:16px;background:#092b2670;color:#f4faf2}.daily-pig-label{font-size:11px;font-weight:800;letter-spacing:.04em;color:#b8ddbd}.daily-pig-label time{margin-left:8px;color:#d6e8d9;font-weight:500}.hero .daily-pig-lesson h2{font-size:19px;line-height:1.4;margin:6px 0}.hero .daily-pig-lesson p{font-size:12px;line-height:1.7;margin:5px 0;color:#e0efe2}.daily-pig-lesson summary{cursor:pointer;color:#f8e3bf;font-size:12px;font-weight:800;padding:7px 0}.daily-pig-lesson a{display:inline-block;color:#fff3cc;font-weight:800;text-decoration:underline;font-size:12px;margin:3px 0 8px}.daily-pig-lesson small{display:block;color:#c6ddd0;font-size:10px;line-height:1.6}.pig-stage[data-mood=tired],.pig-stage[data-mood=cough]{filter:saturate(.86)}.pig-stage[data-mood=tired] .pig-illustration,.pig-stage[data-mood=cough] .pig-illustration{transform:rotate(-6deg)}
 .hero .daily-pig-lesson .dialog-question p{color:#365b48}
 .disease-mechanism{grid-column:1/-1;background:#f7faf4;padding:26px 36px 30px;border-top:1px solid #dcebdc}.mechanism-kicker{font-size:11px;color:#56856a;font-weight:800}.disease-mechanism h4{margin:5px 0;font-size:20px;letter-spacing:-.03em}.disease-mechanism>p{color:#587363;font-size:12px;line-height:1.7}.mechanism-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));list-style:none;gap:18px;padding:0;margin:20px 0}.mechanism-flow li{position:relative;display:grid;justify-items:center;align-content:start;text-align:center;gap:6px;padding:16px 10px;background:#fff;border:1px solid #dfeadf;border-radius:14px}.mechanism-flow li:not(:last-child):after{content:'→';position:absolute;right:-17px;top:40%;color:#57936e;font-size:18px;font-weight:800}.mechanism-icon{display:grid;place-items:center;width:54px;height:54px;background:#edf5e8;border-radius:50%;font-size:29px}.mechanism-flow strong{font-size:12px;color:#2a6042}.mechanism-flow li>span:last-child{font-size:11px;line-height:1.6;color:#496353;word-break:keep-all}.disease-mechanism .mechanism-note{font-size:11px;color:#6a7b70}.disease-mechanism>a{font-size:12px;font-weight:800;text-decoration:underline;color:#246d49}@media(max-width:600px){.disease-mechanism{grid-column:auto;padding:22px 25px}.mechanism-flow{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.mechanism-flow li:nth-child(2):after{content:'↓';right:calc(50% - 6px);top:auto;bottom:-20px}.mechanism-flow li:nth-child(3):after{content:'→'}}
@@ -111,5 +111,25 @@
   .pig-stage-illustrated .pig-illustration { animation: hero-pig-breathe 4.2s ease-in-out 1; }
   @keyframes hero-pig-breathe {
     50% { transform: translateY(calc(var(--pig-rise, 0px) - 7px)) rotate(var(--pig-tilt, 0deg)) scaleY(calc(var(--pig-posture, 1) + .025)); }
+  }
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .lab-world #lab-pig {
+    animation: barn-walk 12s linear infinite, barn-step .55s ease-in-out infinite;
+  }
+  @keyframes barn-walk {
+    0% { translate: 0 0; scale: 1 1; }
+    24% { translate: -14% 0; }
+    27% { translate: -14% 0; scale: 1 1; }
+    28% { translate: -14% 0; scale: -1 1; }
+    72% { scale: -1 1; }
+    73% { translate: 14% 0; scale: -1 1; }
+    76% { translate: 14% 0; scale: 1 1; }
+    100% { translate: 0 0; scale: 1 1; }
+  }
+  @keyframes barn-step {
+    50% { rotate: 1.6deg; }
   }
 }
