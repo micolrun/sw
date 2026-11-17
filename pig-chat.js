@@ -140,6 +140,11 @@
     dialog.showModal();
     input.focus();
     if (!ready) prepare();
+    else {
+      connected = window.puter.auth.isSignedIn();
+      controls();
+      status.textContent = connected ? '질문을 보내 주세요.' : 'AI 연결을 눌러 시작하세요.';
+    }
   });
   document.querySelector('#pig-chat-close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
@@ -154,12 +159,20 @@
     if (!ready) { await prepare(); return; }
     busy = true;
     controls();
+    status.textContent = 'Puter 인증창에서 로그인을 완료해 주세요.';
     try {
-      await window.puter.auth.signIn({attempt_temp_user_creation: true});
+      await limited(window.puter.auth.signIn(), 120000);
       connected = window.puter.auth.isSignedIn();
       status.textContent = connected ? '연결됐어요. 질문을 보내 주세요.' : '연결을 완료한 뒤 다시 시도해 주세요.';
-    } catch {
-      status.textContent = '연결 창을 완료해 주세요. 창이 열리지 않으면 팝업 허용 여부를 확인해 주세요.';
+    } catch (error) {
+      const code = error?.error || error?.code || error?.message;
+      status.textContent = code === 'popup_blocked'
+        ? 'Puter 인증창이 차단됐어요. 이 사이트의 팝업을 허용한 뒤 다시 연결해 주세요.'
+        : code === 'auth_window_closed'
+          ? '인증창이 닫혔어요. AI 연결을 눌러 로그인을 완료해 주세요.'
+          : code === 'TIMEOUT'
+            ? '인증 완료를 기다리는 시간이 길어졌어요. Puter에서 로그인을 마쳤다면 AI 연결을 다시 눌러 주세요.'
+            : 'Puter 인증을 완료하지 못했어요. AI 연결을 눌러 다시 시도해 주세요.';
     } finally {
       busy = false;
       controls();
@@ -172,14 +185,8 @@
     if (!question || busy || !connected) return;
     busy = true;
     controls();
-    status.textContent = '무료 월 제공량을 확인하고 있어요.';
     const controller = new AbortController();
     try {
-      const usage = await limited(window.puter.auth.getMonthlyUsage(), 15000);
-      // Keep a one-cent allowance buffer for this small, bounded request.
-      if (!Number.isFinite(usage?.allowanceInfo?.remaining) || usage.allowanceInfo.remaining < 1000000) {
-        throw new Error('ALLOWANCE');
-      }
       const references = findReferences(question);
       const context = references.map((article, index) =>
         '[' + (index + 1) + '] ' + article.title + '\n' + article.summary + '\n' +
@@ -214,13 +221,19 @@
       history = history.slice(-6);
       status.textContent = '이어서 궁금한 점을 물어보세요.';
     } catch (error) {
-      const allowance = error?.message === 'ALLOWANCE';
+      const code = error?.code || error?.error?.code ||
+        (typeof error?.error === 'string' ? error.error : '');
+      const detail = [code, error?.message, error?.msg, error?.error?.message].join(' ').toLowerCase();
+      const allowance = /insufficient|allowance|quota|credit|usage.limit|limit.exceeded/.test(detail);
       const timeout = error?.message === 'TIMEOUT';
-      if (!allowance && !timeout) connected = false;
+      const authentication = /unauthori[sz]ed|invalid.token|auth.required|auth.expired/.test(detail);
+      connected = !authentication && window.puter.auth.isSignedIn();
       status.textContent = allowance
-        ? '월 제공량이 부족하거나 확인되지 않아 AI 요청을 멈췄어요.'
+        ? 'Puter에서 사용 가능량 부족을 알렸어요. Puter 계정의 무료 제공량을 확인해 주세요.'
         : timeout ? '답변이 지연되고 있어요. 잠시 뒤 다시 질문해 주세요.'
-          : 'AI에 연결하지 못했어요. 연결 상태와 무료 제공량을 확인한 뒤 다시 시도해 주세요.';
+          : authentication ? 'Puter 인증이 만료됐어요. AI 연결을 눌러 다시 인증해 주세요.'
+            : 'AI 응답을 받지 못했어요. 잠시 뒤 다시 보내 주세요.' +
+              (/^[a-z0-9_]{1,50}$/i.test(code) ? ' (' + code + ')' : '');
       if (!input.value) input.value = question;
     } finally {
       controller.abort();
