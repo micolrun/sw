@@ -166,7 +166,3 @@
   .growth-stages strong { font-size: 12px; }
   .growth-stages b, .growth-stages small, .growth-age { font-size: 10px; }
 }
-
-#lab-pig-3d { display: none; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-.lab-3d-ready #lab-pig-3d { display: block; }
-.lab-3d-ready #lab-pig { visibility: hidden; animation: none; }

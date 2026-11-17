@@ -29,7 +29,7 @@ jobs:
       - name: Prepare static files
         run: |
           mkdir dist
-          cp index.html styles.css app.js pig-3d.js daily-pig.js growth-simulator.js lab-pig-3d.js farm-weather.js course.html course.css course-data.js course.js farm-layout.png favicon.svg .nojekyll dist/
+          cp index.html styles.css app.js pig-3d.js daily-pig.js growth-simulator.js farm-weather.js course.html course.css course-data.js course.js farm-layout.png favicon.svg .nojekyll dist/
           cp -R assets dist/
       - name: Refresh Dabom pig carcass quote
         run: node scripts/update-pig-price.mjs
