@@ -25,6 +25,7 @@
   let lastDay = '', questions = [], index = 0;
   const prev = document.querySelector('#pig-prev');
   const next = document.querySelector('#pig-next');
+  const pig = document.querySelector('#pig-talk');
   function render() {
     const item = questions[index];
     document.querySelector('#pig-count').textContent = `${index + 1} / ${questions.length}`;
@@ -35,7 +36,7 @@
     document.querySelector('#daily-pig-observation').textContent = item.observation;
     document.querySelector('#daily-pig-action').textContent = item.action;
     document.querySelector('#daily-pig-link').href = `course.html#chapter-${item.chapter}`;
-    document.querySelector('.pig-stage').dataset.mood = item.mood;
+    pig.dataset.mood = item.mood;
     window.dispatchEvent(new CustomEvent('daily-pig-change', { detail: item }));
   }
   function update() {
@@ -67,6 +68,36 @@
       status.textContent = name.value ? '이 브라우저에 저장했습니다.' : '기본 이름으로 돌아갔습니다.';
     } catch { status.textContent = '브라우저에 저장할 수 없습니다.'; }
   });
+
+  const speech = document.querySelector('#pig-speech');
+  const lines = [
+    '{name} 등장! 꿀꿀 두 번이면 인사 끝!',
+    '코가 왜 납작하냐고요? 바닥 수색에 딱 좋아요!',
+    '오늘의 운동은 낮잠 자리까지 세 걸음!',
+    '이 꼬리 보셨죠? 열심히 말아 올렸어요.',
+    '사진 찍어요? 왼쪽 볼이 더 동그래요!',
+    '제 발자국은 작지만 존재감은 큽니다. 꿀!',
+    '방금 그건 배에서 난 소리예요. 제가 한 말은 아니에요.',
+    '오늘의 패션은 앞발 두 짝, 뒷발 두 짝!',
+    '눈 감고 열까지 세면 낮잠 시작! 하나… 쿨쿨.',
+    '{name}의 개인기! 귀 한쪽만 쫑긋!',
+    '제가 길을 잃으면 코부터 따라가 주세요.',
+    '사료통 소리는 저 멀리서도 들려요. 이상하죠?',
+    '친구랑 코를 맞댔어요. 우리끼리는 그게 하이파이브예요!',
+    '시원한 자리 발견! 제 옆도 비워 뒀어요.',
+    '진흙이 발에 묻었어요. 오늘은 무늬 양말이에요!',
+    '발소리만 듣고도 간식 시간이 아닌 건 알겠어요. 아쉽네요!',
+    '제 꼬리가 느낌표처럼 펴지면 진짜 깜짝 놀란 거예요!',
+    '제일 멋진 표정 해 볼게요. 잠깐, 코부터 닦고요!',
+    '{name}에게 한 표 주세요. 낮잠 경연 대회에 나갈 거예요!',
+    '오늘 연습한 인사예요. 안녕히 가세요, 꿀꾸르륵!'
+  ];
+  let nextLine = 0;
+  pig.addEventListener('click', () => {
+    speech.textContent = lines[nextLine].replace('{name}', () => display.textContent);
+    nextLine = (nextLine + 1) % lines.length;
+  });
+
   update();
   window.setInterval(update, 60000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) update(); });

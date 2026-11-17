@@ -103,6 +103,49 @@
   transform: translateY(var(--pig-rise, 0)) rotate(var(--pig-tilt, 0deg)) scaleY(var(--pig-posture, 1));
   transform-origin: center 86%;
 }
+.hero-art {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: 16px;
+}
+.pig-speech {
+  position: relative;
+  z-index: 2;
+  width: fit-content;
+  max-width: min(330px, 100%);
+  margin: 0 auto 12px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  background: #fff7e6;
+  color: #243f35;
+  box-shadow: 0 6px 18px #112d2866;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.pig-speech::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(50% - 9px);
+  border: 9px solid transparent;
+  border-top-color: #fff7e6;
+}
+#pig-talk {
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  touch-action: manipulation;
+}
+#pig-talk .pig-illustration { display: block; }
+@media (max-width: 720px) {
+  .hero-art { height: auto; }
+}
 .pig-stage-illustrated[data-mood=tired] { --pig-rise: 7px; --pig-tilt: -6deg; --pig-posture: .94; }
 .pig-stage-illustrated[data-mood=cough] { --pig-tilt: -4deg; --pig-posture: .97; }
 .pig-stage-illustrated[data-mood=water],

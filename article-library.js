@@ -1,19 +1,21 @@
 (() => {
   const requested = new URLSearchParams(location.search).get('topic');
   const topic = Object.hasOwn(articleCollections, requested) ? requested : 'field';
-  const {title, code, scope, entries} = articleCollections[topic];
+  const {title, code, scope, note, entries} = articleCollections[topic];
   const source = 'https://www.pignpork.com/news/';
   const articleRows = entries.trim().split('\n').map(line => line.split('|'));
-  const artByCategory = {
-    '생산비·수익': 'feed', '생산성': 'production', '출하·등급': 'shipping', '기록·계획': 'records'
-  };
-
   document.title = title + ' | 대한동물약품 양돈컨설팅';
   document.querySelector('#reading-title').textContent = title;
-  const scopeText = '피그앤포크 ' + scope + '을 기사별로 정리했습니다.';
-  document.querySelector('#reading-scope').textContent = topic === 'business'
-    ? scopeText + ' 가격과 생산성 자료는 각 기사에 나온 조사 시점을 기준으로 읽어 주세요.'
-    : scopeText;
+  const illustrated = articleRows.some(row => row[4]);
+  const photoCredit = illustrated ? ' 사진은 주제별 AI 참고 이미지입니다.' : '';
+  document.querySelector('#reading-scope').textContent =
+    '피그앤포크 ' + scope + '을 기사별로 정리했습니다.' + photoCredit;
+  if (note) {
+    const readingNote = document.querySelector('#reading-note');
+    readingNote.textContent = note;
+    readingNote.hidden = false;
+  }
+  document.querySelector('#reading-guide').hidden = topic !== 'ped';
   document.querySelector('#reading-source').href = source + 'articleList.html?sc_sub_section_code=' + code + '&view_type=sm';
   document.querySelector('.reading-nav [data-topic="' + topic + '"]').setAttribute('aria-current', 'page');
 
@@ -27,7 +29,7 @@
     category.add(new Option(name, name));
   }
 
-  const cards = articleRows.map(([id, field, heading, summary]) => {
+  const cards = articleRows.map(([id, field, heading, summary, photo, caption]) => {
     const card = template.content.firstElementChild.cloneNode(true);
     card.querySelector('.reading-category').textContent = field;
     card.querySelector('h2').textContent = heading;
@@ -35,12 +37,13 @@
     const link = card.querySelector('a');
     link.href = source + 'articleView.html?idxno=' + id;
     link.setAttribute('aria-label', heading + ' 원문 (새 탭)');
-    if (topic === 'business') {
-      const art = card.querySelector('.reading-art');
-      art.classList.add('reading-art-' + artByCategory[field]);
-      art.hidden = false;
+    if (photo && caption) {
+      const figure = card.querySelector('.reading-figure');
+      figure.querySelector('img').src = 'assets/article-photos/' + photo + '.webp';
+      figure.querySelector('figcaption').textContent = caption;
+      figure.hidden = false;
     }
-    return {card, field, text: [field, heading, summary].join(' ').toLocaleLowerCase('ko')};
+    return {card, field, text: [field, heading, summary, caption].join(' ').toLocaleLowerCase('ko')};
   });
   grid.append(...cards.map(({card}) => card));
 
