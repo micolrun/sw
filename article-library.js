@@ -6,10 +6,8 @@
   const articleRows = entries.trim().split('\n').map(line => line.split('|'));
   document.title = title + ' | 대한동물약품 양돈컨설팅';
   document.querySelector('#reading-title').textContent = title;
-  const illustrated = articleRows.some(row => row[4]);
-  const photoCredit = illustrated ? ' 사진은 주제별 AI 참고 이미지입니다.' : '';
   document.querySelector('#reading-scope').textContent =
-    '피그앤포크 ' + scope + '을 기사별로 정리했습니다.' + photoCredit;
+    '피그앤포크 ' + scope + '을 정리했습니다. 사진과 도표는 원문에서 볼 수 있습니다.';
   if (note) {
     const readingNote = document.querySelector('#reading-note');
     readingNote.textContent = note;
@@ -29,21 +27,32 @@
     category.add(new Option(name, name));
   }
 
-  const cards = articleRows.map(([id, field, heading, summary, photo, caption]) => {
+  const cards = articleRows.map(([id, field, heading, summary]) => {
     const card = template.content.firstElementChild.cloneNode(true);
+    const [visual, caption, anchor, ...points] = articleGuides[id];
+    const articleUrl = source + 'articleView.html?idxno=' + id;
     card.querySelector('.reading-category').textContent = field;
     card.querySelector('h2').textContent = heading;
-    card.querySelector('p').textContent = summary;
-    const link = card.querySelector('a');
-    link.href = source + 'articleView.html?idxno=' + id;
+    card.querySelector('.reading-card-summary p').textContent = summary;
+    const link = card.querySelector('.reading-article-link');
+    link.href = articleUrl;
     link.setAttribute('aria-label', heading + ' 원문 (새 탭)');
-    if (photo && caption) {
-      const figure = card.querySelector('.reading-figure');
-      figure.querySelector('img').src = 'assets/article-photos/' + photo + '.webp';
-      figure.querySelector('figcaption').textContent = caption;
-      figure.hidden = false;
-    }
-    return {card, field, text: [field, heading, summary, caption].join(' ').toLocaleLowerCase('ko')};
+
+    const visualLink = card.querySelector('.reading-visual-link');
+    const fragment = anchor ? '#:~:text=' + encodeURIComponent(anchor).replace(/-/g, '%2D') : '';
+    visualLink.href = articleUrl + fragment;
+    visualLink.textContent = '원문 ' + visual + ' 보기 ↗';
+    visualLink.setAttribute('aria-label', heading + ' 원문 ' + visual + ' 보기 (새 탭)');
+    card.querySelector('.reading-visual-caption').textContent = caption;
+
+    const outline = card.querySelector('.reading-outline');
+    outline.querySelector('summary').textContent = '핵심 항목 ' + points.length + '개';
+    outline.querySelector('ul').append(...points.map(point => {
+      const item = document.createElement('li');
+      item.textContent = point;
+      return item;
+    }));
+    return {card, field, text: [field, heading, summary, caption, ...points].join(' ').toLocaleLowerCase('ko')};
   });
   grid.append(...cards.map(({card}) => card));
 

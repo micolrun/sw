@@ -7,9 +7,9 @@
   <title>양돈 기사 모음 | 대한동물약품 양돈컨설팅</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="article-library.css?v=2">
-  <script src="article-library-data.js?v=2" defer></script>
-  <script src="article-library.js?v=2" defer></script>
+  <link rel="stylesheet" href="article-library.css?v=3">
+  <script src="article-library-data.js?v=3" defer></script>
+  <script src="article-library.js?v=3" defer></script>
 </head>
 <body class="article-library">
   <a class="skip-link" href="#articles">본문 바로가기</a>
@@ -36,7 +36,7 @@
       <a id="reading-guide" href="https://www.woah.org/en/disease/porcine-epidemic-diarrhoea/" target="_blank" rel="noopener noreferrer" hidden>WOAH 질병 안내 ↗</a>
     </div>
     <div class="reading-filters" hidden>
-      <label for="reading-search">기사 검색<input id="reading-search" type="search" placeholder="제목·요약·사진 설명 검색"></label>
+      <label for="reading-search">기사 검색<input id="reading-search" type="search" placeholder="제목·핵심 항목·자료 설명 검색"></label>
       <label for="reading-category">분야<select id="reading-category"><option value="">전체 분야</option></select></label>
       <p id="reading-count" role="status"></p>
     </div>
@@ -51,12 +51,16 @@
         <h2></h2>
         <p></p>
       </div>
-      <figure class="reading-figure" hidden>
-        <img alt="" width="480" height="300" loading="lazy" decoding="async">
-        <figcaption></figcaption>
-      </figure>
+      <div class="reading-visual">
+        <a class="reading-visual-link" target="_blank" rel="noopener noreferrer"></a>
+        <p class="reading-visual-caption"></p>
+      </div>
+      <details class="reading-outline">
+        <summary></summary>
+        <ul></ul>
+      </details>
       <div class="reading-card-footer">
-        <a target="_blank" rel="noopener noreferrer">피그앤포크 원문 ↗</a>
+        <a class="reading-article-link" target="_blank" rel="noopener noreferrer">피그앤포크 원문 ↗</a>
       </div>
     </article>
   </template>
