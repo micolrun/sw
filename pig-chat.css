@@ -1,0 +1,92 @@
+.pig-chat-open {
+  position: relative;
+  z-index: 2;
+  padding: 10px 19px;
+  border: 2px solid #243f35;
+  border-radius: 16px;
+  background: #ffe4a3;
+  color: #243f35;
+  box-shadow: 3px 4px 0 #102d29;
+  font-weight: 800;
+}
+.pig-chat-open:hover { background: #fff0c9; }
+.pig-chat {
+  width: min(580px, calc(100% - 24px));
+  max-height: min(840px, calc(100dvh - 24px));
+  padding: 0;
+  overflow-y: auto;
+  border: 3px solid #253e35;
+  border-radius: 24px;
+  background: #fff9ec;
+  color: #253e35;
+  box-shadow: 8px 8px 0 #253e3555;
+}
+.pig-chat::backdrop { background: #0c292cb3; }
+.pig-chat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-bottom: 3px solid #253e35;
+  background: #f8d8ce;
+}
+.pig-chat-header img { flex: none; width: 60px; height: 60px; object-fit: contain; }
+.pig-chat-header h2 { margin: 0; font-size: 19px; line-height: 1.4; }
+.pig-chat .pig-chat-header p { margin: 3px 0 0; color: #375547; font-size: 12px; }
+.pig-chat-header button { margin-left: auto; border: 0; background: transparent; color: #253e35; font-size: 29px; }
+.pig-chat-log {
+  display: grid;
+  align-content: start;
+  gap: 15px;
+  height: clamp(180px, 34dvh, 330px);
+  padding: 18px 20px;
+  overflow-y: auto;
+  background-image: radial-gradient(#d5d7bd 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+.pig-chat-message {
+  position: relative;
+  max-width: 91%;
+  padding: 11px 14px;
+  border: 2px solid #324c3e;
+  border-radius: 17px 17px 17px 4px;
+  background: #fff;
+  box-shadow: 2px 3px 0 #324c3e29;
+}
+.pig-chat-message[data-role="user"] {
+  justify-self: end;
+  border-radius: 17px 17px 4px 17px;
+  background: #dff0df;
+}
+.pig-chat-message strong { display: block; margin-bottom: 4px; font-size: 12px; }
+.pig-chat .pig-chat-message p { margin: 0; color: #294a39; font-size: 14px; line-height: 1.75; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; }
+.pig-chat-sources { display: grid; gap: 5px; margin-top: 9px; padding-top: 8px; border-top: 1px dashed #9fb59e; }
+.pig-chat-sources a { color: #245b43; font-size: 12px; text-decoration: underline; }
+.pig-chat-examples { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 18px 0; }
+.pig-chat button { font-family: inherit; }
+.pig-chat-examples button, .pig-chat-actions button {
+  padding: 6px 10px;
+  border: 1px solid #6d8872;
+  border-radius: 12px;
+  background: #fffdf4;
+  color: #31523e;
+  font-size: 12px;
+}
+#pig-chat-form { margin: 12px 18px 0; }
+#pig-chat-form label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: 800; }
+.pig-chat-compose { display: flex; align-items: stretch; gap: 8px; }
+.pig-chat-compose textarea { flex: 1; min-width: 0; resize: vertical; padding: 9px; border: 2px solid #78947c; border-radius: 12px; background: #fff; color: #253e35; font: inherit; font-size: 14px; }
+.pig-chat-compose button { border: 2px solid #253e35; border-radius: 12px; background: #285a43; color: #fff; padding: 9px 12px; font-size: 13px; font-weight: 800; white-space: nowrap; }
+.pig-chat button:disabled { opacity: .5; cursor: wait; }
+.pig-chat-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 18px; }
+#pig-chat-status { color: #375547; font-size: 12px; }
+.pig-chat .pig-chat-info { margin: 6px 18px 12px; color: #526557; font-size: 11px; line-height: 1.6; }
+.pig-chat-info a { text-decoration: underline; }
+@media (max-width: 480px) {
+  .pig-chat-header { gap: 8px; padding-inline: 12px; }
+  .pig-chat-header h2 { font-size: 17px; }
+  .pig-chat-header img { width: 46px; height: 46px; }
+  .pig-chat-log { padding-inline: 13px; }
+  .pig-chat-examples { padding-inline: 12px; }
+  #pig-chat-form { margin-inline: 12px; }
+}

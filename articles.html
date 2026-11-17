@@ -7,9 +7,10 @@
   <title>양돈 기사 모음 | 대한동물약품 양돈컨설팅</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="article-library.css?v=4">
+  <link rel="stylesheet" href="article-library.css?v=5">
   <script src="article-library-data.js?v=4" defer></script>
-  <script src="article-library.js?v=4" defer></script>
+  <script src="related-articles-data.js?v=1" defer></script>
+  <script src="article-library.js?v=5" defer></script>
 </head>
 <body class="article-library">
   <a class="skip-link" href="#articles">본문 바로가기</a>
@@ -24,7 +25,9 @@
         <a href="?topic=ped" data-topic="ped">PED 특집</a>
         <a href="?topic=care" data-topic="care">사양관리</a>
         <a href="?topic=research" data-topic="research">집중연구</a>
+        <a href="?topic=related" data-topic="related">관련기사</a>
       </nav>
+      <nav id="related-categories" class="reading-nav" aria-label="관련기사 분야" hidden></nav>
     </div>
   </header>
   <main class="wrap reading-main" id="articles">
@@ -51,11 +54,15 @@
         <h2></h2>
         <p></p>
       </div>
-      <div class="reading-visual">
+      <div class="reading-visual" hidden>
         <a class="reading-visual-link" target="_blank" rel="noopener noreferrer"></a>
         <p class="reading-visual-caption"></p>
       </div>
-      <details class="reading-outline">
+      <details class="reading-outline" hidden>
+        <summary></summary>
+        <ul></ul>
+      </details>
+      <details class="reading-connections" hidden>
         <summary></summary>
         <ul></ul>
       </details>

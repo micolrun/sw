@@ -10,11 +10,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=pig-bubble">
+  <link rel="stylesheet" href="styles.css?v=related-menu">
   <script src="app.js?v=handon" defer></script>
   <script src="daily-pig.js?v=3" defer></script>
   <script src="growth-simulator.js?v=10" defer></script>
   <script src="farm-weather.js?v=1" defer></script>
+  <link rel="stylesheet" href="pig-chat.css?v=1">
+  <script src="pig-chat.js?v=1" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">본문 바로가기</a>
@@ -25,11 +27,11 @@
         <strong class="brand-name">대한동물약품 양돈컨설팅</strong>
       </a>
       <nav class="desktop-nav" aria-label="주 메뉴">
-        <a href="#disease">질병 관리</a><a href="#management">사양 관리</a><a href="course.html">교육과정</a><a href="articles.html?topic=field">현장실전</a><a href="articles.html?topic=business">양돈경영</a><a href="#news">업계 소식</a>
+        <a href="#disease">질병 관리</a><a href="#management">사양 관리</a><a href="course.html">교육과정</a><a href="articles.html?topic=field">현장실전</a><a href="articles.html?topic=business">양돈경영</a><details class="related-menu"><summary>관련기사</summary><div class="related-menu-links"><a href="articles.html?topic=related">전체 관련기사</a><a href="articles.html?topic=related&amp;category=health">질병·방역</a><a href="articles.html?topic=related&amp;category=breeding">번식·모돈</a><a href="articles.html?topic=related&amp;category=piglets">자돈·육성</a><a href="articles.html?topic=related&amp;category=nutrition">사료·영양</a><a href="articles.html?topic=related&amp;category=environment">시설·환경</a><a href="articles.html?topic=related&amp;category=business">경영·생산성</a><a href="articles.html?topic=related&amp;category=technology">데이터·기술</a><a href="articles.html?topic=related&amp;category=industry">산업·현장</a></div></details><a href="#news">업계 소식</a>
       </nav>
       <button class="menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
     </div>
-    <nav class="mobile-nav" id="mobile-menu" aria-label="모바일 메뉴" hidden><a href="#disease">질병 관리</a><a href="#management">사양 관리</a><a href="course.html">교육과정</a><a href="articles.html?topic=field">현장실전</a><a href="articles.html?topic=business">양돈경영</a><a href="#news">업계 소식</a></nav>
+    <nav class="mobile-nav" id="mobile-menu" aria-label="모바일 메뉴" hidden><a href="#disease">질병 관리</a><a href="#management">사양 관리</a><a href="course.html">교육과정</a><a href="articles.html?topic=field">현장실전</a><a href="articles.html?topic=business">양돈경영</a><details class="related-menu"><summary>관련기사</summary><div class="related-menu-links"><a href="articles.html?topic=related">전체 관련기사</a><a href="articles.html?topic=related&amp;category=health">질병·방역</a><a href="articles.html?topic=related&amp;category=breeding">번식·모돈</a><a href="articles.html?topic=related&amp;category=piglets">자돈·육성</a><a href="articles.html?topic=related&amp;category=nutrition">사료·영양</a><a href="articles.html?topic=related&amp;category=environment">시설·환경</a><a href="articles.html?topic=related&amp;category=business">경영·생산성</a><a href="articles.html?topic=related&amp;category=technology">데이터·기술</a><a href="articles.html?topic=related&amp;category=industry">산업·현장</a></div></details><a href="#news">업계 소식</a></nav>
   </header>
 
   <aside class="updates-bar" aria-label="최근 업데이트">
@@ -66,6 +68,7 @@
           <button class="pig-stage pig-stage-illustrated" id="pig-talk" type="button" aria-label="아기돼지의 다음 대사 보기" aria-controls="pig-speech">
             <img class="pig-illustration" src="assets/hero-pig.png" alt="" width="1293" height="1217" fetchpriority="high">
           </button>
+          <button class="pig-chat-open" id="pig-chat-open" type="button" aria-haspopup="dialog" aria-controls="pig-chat-dialog">💬 나에게 물어봐!</button>
         </div>
       </div>
     </section>
@@ -230,5 +233,32 @@
   </main>
   <footer class="footer"><div class="wrap footer-inner"><div class="footer-brand"><span class="footer-mark">SW</span><span>양돈 현장 인사이트<small>Swine knowledge for the field</small></span></div><div class="footer-links"><a href="#top">맨 위로 ↑</a><a href="https://github.com/micolrun/sw/issues" target="_blank" rel="noopener noreferrer">자료 제안·오류 제보 ↗</a></div></div><div class="wrap footer-bottom">현장 참고 자료 · 진단 및 치료는 담당 수의사와 상의하세요.</div></footer>
   <dialog id="detail-dialog" aria-labelledby="dialog-title"><button class="dialog-close" type="button" aria-label="닫기">×</button><div id="dialog-content"></div></dialog>
+  <dialog class="pig-chat" id="pig-chat-dialog" aria-labelledby="pig-chat-title">
+    <header class="pig-chat-header">
+      <img src="assets/hero-pig.png" alt="" width="60" height="60">
+      <div><h2 id="pig-chat-title"><span id="pig-chat-name">아기돼지</span>와 이야기</h2><p>꿀꿀! 함께 알아보자.</p></div>
+      <button id="pig-chat-close" type="button" aria-label="대화창 닫기">×</button>
+    </header>
+    <div class="pig-chat-log" id="pig-chat-log" role="log" aria-label="돼지와의 대화" aria-live="polite"></div>
+    <div class="pig-chat-examples" aria-label="질문 예시">
+      <button type="button">자돈이 설사하면 무엇을 살펴봐?</button>
+      <button type="button">이유 후 사료를 잘 먹게 하려면?</button>
+      <button type="button">돼지에게 알맞은 환기는?</button>
+    </div>
+    <form id="pig-chat-form">
+      <label for="pig-chat-input">궁금한 질문</label>
+      <div class="pig-chat-compose">
+        <textarea id="pig-chat-input" rows="2" maxlength="500" placeholder="돼지의 건강·먹이·생활, 무엇이 궁금해?" required></textarea>
+        <button id="pig-chat-send" type="submit" disabled>보내기 ↗</button>
+      </div>
+    </form>
+    <div class="pig-chat-actions">
+      <button id="pig-chat-connect" type="button" disabled>무료 AI 연결</button>
+      <button id="pig-chat-reset" type="button">새 대화</button>
+      <span id="pig-chat-status" role="status"></span>
+    </div>
+    <p class="pig-chat-info">Puter의 월 제공량으로 이용합니다. 질문·최근 대화·관련 교육자료가 Puter AI로 전송됩니다. <a href="https://docs.puter.com/user-pays-model/" target="_blank" rel="noopener noreferrer">이용 조건</a></p>
+    <p class="pig-chat-info">교육용 AI 답변입니다. 질병 진단과 약품 사용은 담당 수의사와 확인하세요.</p>
+  </dialog>
 </body>
 </html>

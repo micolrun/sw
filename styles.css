@@ -319,3 +319,26 @@
 .reading-shortcuts { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
 .reading-shortcuts a { padding: 6px 12px; border: 1px solid currentColor; border-radius: 999px; font-size: 12px; font-weight: 800; }
 .reading-shortcuts a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.related-menu { position: relative; color: #526d65; font-size: 14px; font-weight: 700; }
+.related-menu summary { cursor: pointer; white-space: nowrap; }
+.related-menu-links {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  z-index: 50;
+  display: grid;
+  min-width: 190px;
+  padding: 8px 14px;
+  border: 1px solid #dce6de;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 12px 28px #173b3526;
+}
+.desktop-nav .related-menu-links a { padding-block: 7px; white-space: nowrap; }
+@media (max-width: 1020px) and (min-width: 721px) {
+  .desktop-nav { gap: 12px; }
+}
+@media (max-width: 720px) {
+  .mobile-nav .related-menu summary { padding: 12px 5px; border-top: 1px solid #edf1ed; }
+  .mobile-nav .related-menu-links { position: static; box-shadow: none; min-width: 0; padding: 0 14px; }
+}
