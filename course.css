@@ -111,6 +111,10 @@
 .sow-method{margin-top:14px;padding:10px 12px;border:1px solid #dce8dc;border-radius:9px}
 .sow-method summary{cursor:pointer;font-weight:750}
 .sow-method li,.sow-method p{font-size:14px}
+.farm-cost-fields{min-width:0;border:1px solid #c5d9c9;border-radius:12px;padding:10px 13px;margin:18px 0}
+.farm-cost-fields legend{padding-inline:6px;font-size:20px;font-weight:800}
+.farm-cost-fields .farm-cost-note{font-size:14px}
+.product-links{display:flex;flex-wrap:wrap;gap:8px}
 #sow-error{color:#9c2e23}
 @media (prefers-reduced-motion:no-preference){
   .course-motion-active .picture-card{animation:course-card-rise .4s ease-out calc(var(--step) * 55ms) both}
@@ -127,13 +131,22 @@
 .course-button:hover{background:#eaf3e7}
 .course-button.next{margin-left:auto;background:var(--ink);color:white}
 .glossary{padding-block:25px 52px;scroll-margin-top:70px}
-.glossary h2{font-size:30px;letter-spacing:-.05em}
-.glossary label{margin-right:12px}
-.glossary input{max-width:100%;border:1px solid #a8bcaa;border-radius:8px;padding:8px 12px}
-#glossary-list:not([hidden]){display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:10px}
-#glossary-list div{background:white;border:1px solid var(--line);border-radius:9px;padding:12px}
-#glossary-list dt{font-weight:800}
-#glossary-list dd{margin:4px 0 0;color:#36584a;font-size:13px}
+body:has(#glossary:target) .course-hero,body:has(#glossary:target) .course-layout{display:none}
+.glossary h2{font-size:clamp(29px,5vw,45px);letter-spacing:-.055em;margin:12px 0 18px}
+.glossary-controls{display:flex;align-items:end;flex-wrap:wrap;gap:12px}
+.glossary-controls label{display:grid;gap:5px;font-size:14px;font-weight:750}
+.glossary input,.glossary select{font:inherit;color:var(--ink);max-width:100%;min-height:44px;border:1px solid #a8bcaa;border-radius:8px;background:white;padding:8px 12px}
+#glossary-count{font-size:14px;color:#36584a;margin:14px 0}
+#glossary-list:not([hidden]){display:grid;grid-template-columns:repeat(auto-fit,minmax(min(265px,100%),1fr));gap:12px}
+.glossary-card{background:white;border:1px solid var(--line);border-radius:12px;padding:15px;word-break:keep-all}
+.glossary-card dt{display:flex;align-items:baseline;flex-wrap:wrap;gap:5px 9px;font-size:23px;font-weight:800;letter-spacing:-.04em}
+.glossary-card dt small{font-size:12px;color:#36584a;letter-spacing:0}
+.glossary-card dd{margin:9px 0 0;color:#34534a}
+.glossary-visual{display:flex;align-items:center;gap:9px;background:#e8f2e7;border-radius:8px;padding:8px;font-size:15px;line-height:1.4}
+.glossary-visual svg{width:35px;height:35px;flex:none;fill:none;stroke:#255640;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.glossary-meaning,.glossary-example{display:block;margin-top:8px}
+.glossary-meaning{font-size:16px;color:var(--ink)}
+.glossary-example{font-size:14px}
 @media(max-width:760px){
   .course-hero-grid,.course-layout{grid-template-columns:1fr}
   .course-hero-grid{padding-block:40px}

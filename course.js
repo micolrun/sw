@@ -3,6 +3,8 @@ const chapterNav = document.querySelector('#chapter-nav');
 const progress = document.querySelector('#course-progress');
 const glossaryList = document.querySelector('#glossary-list');
 const glossarySearch = document.querySelector('#glossary-search');
+const glossaryCategory = document.querySelector('#glossary-category');
+const glossaryCount = document.querySelector('#glossary-count');
 const storageKey = 'sw-course-completed';
 const routeLabels = ['사람', '차량', '돼지', '분뇨'];
 
@@ -166,25 +168,45 @@ function renderOverview(index, chapter) {
 }
 
 const savedDabomQuote = { date: '2026-11-16', price: 5574 };
+const savedProducerQuote = { date: '2026-11-16', price: 497000 };
 const farmScaleInput = ['sows', '농장 규모 · 연평균 모돈 수', '두', 3000, 1, 1000000, 1];
+const farmCostItems = [
+  ['feedCost', '사료비', 209792],
+  ['pigCost', '가축비', 85460],
+  ['hiredLabor', '고용 인건비', 19204],
+  ['ownLabor', '자가노동비', 8878],
+  ['facilityCost', '농구·영농시설비', 20338],
+  ['depreciation', '별도 감가상각비', 0],
+  ['healthCost', '방역·치료비', 12916],
+  ['utilityCost', '수도·광열비', 9847],
+  ['manureCost', '분뇨 처리비', 13410],
+  ['otherCost', '기타비용', 31874]
+];
+const surveyCost = farmCostItems.reduce((total, [, , amount]) => total + amount, 0);
+const farmCostInputs = farmCostItems.map(([name, label, amount]) => [name, label, '원/두', amount, 0, 2000000, 1]);
 const sowInputs = [
   ['weaned', '복당 이유두수', '두', 10.25, 0, 30, 0.01],
   ['weaningAge', '이유일령', '일', 25, 1, 90, 1],
   ['survival', '이유 후 출하 비율', '%', 84.375, 0, 100, 0.001],
   ['price', '돼지 도체 경락가', '원/kg', savedDabomQuote.price, 0, 50000, 1],
   ['weight', '평균 도체중', 'kg/두', 88, 1, 200, 0.1],
-  ['cost', '출하 1두당 전체 사육비', '원/두', 412000, 0, 2000000, 1],
+  ['cost', '출하 1두당 전체 사육비', '원/두', surveyCost, 0, 2000000, 1],
   ['otherDays', '임신·포유 외 기간', '일/복', 28, 0, 365, 1]
 ];
+const productionInputs = sowInputs.map(input => {
+  if (input[0] === 'price') return ['price', '비육돈 농가수취 산지가격', '원/110kg', savedProducerQuote.price, 0, 2000000, 1];
+  if (input[0] === 'weight') return ['weight', '평균 출하 생체중', 'kg/두', 110, 1, 250, 0.1];
+  return input;
+});
 
-function sowProfit({ sows = 1, weaned, weaningAge, survival, price, weight, cost, otherDays }) {
+function sowProfit({ sows = 1, weaned, weaningAge, survival, price, weight, cost, otherDays }, priceWeight = 1) {
   const litters = 365 / (114 + weaningAge + otherDays);
   const psy = litters * weaned;
   const msy = psy * survival / 100;
   const shipped = sows * msy;
-  const revenue = shipped * weight * price;
+  const revenue = shipped * (weight / priceWeight) * price;
   const expenses = shipped * cost;
-  return { litters, psy, msy, weanedTotal: sows * psy, shipped, revenue,
+  return { litters, psy, msy, weanedTotal: sows * psy, shipped, revenue, unitCost: cost,
     cost: expenses, profit: revenue - expenses, breakEven: shipped ? cost / weight : null };
 }
 
@@ -192,34 +214,45 @@ const sowNumber = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 });
 const sowMoney = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
 const koreanDate = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 
-function showDabomQuote(status, quote) {
+function showDabomQuote(status, quote, unit, fallback = false) {
   const today = koreanDate.format(new Date());
-  const label = quote.date === today ? '오늘 거래분' : '최근 공개 거래분';
-  status.textContent = `${label} ${quote.date} · ${sowMoney.format(quote.price)}원/kg`;
+  const label = quote.date === today ? '오늘 거래분' : fallback ? '마지막 확인 거래분' : '최근 공개 거래분';
+  status.textContent = `${label} ${quote.date} · ${sowMoney.format(quote.price)}${unit}`;
 }
 
-async function refreshDabomQuote(form, update) {
+async function refreshDabomQuote(form, update, isFarm) {
   const status = document.querySelector('#sow-dabom-quote');
   const price = form.elements.price;
-  showDabomQuote(status, savedDabomQuote);
+  const saved = isFarm ? savedDabomQuote : savedProducerQuote;
+  const unit = isFarm ? '원/kg' : '원/110kg';
+  showDabomQuote(status, saved, unit);
   let edited = false;
   price.addEventListener('input', () => { edited = true; });
   form.addEventListener('reset', () => { edited = false; });
   try {
     const response = await fetch('pig-price.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
     if (!response.ok) throw new Error('Quote unavailable');
-    const quote = await response.json();
-    if (!/^20\d{2}-\d{2}-\d{2}$/.test(quote.date) || quote.date > koreanDate.format(new Date()) ||
-        quote.date < savedDabomQuote.date || !Number.isInteger(quote.price) ||
+    const published = await response.json();
+    const quote = isFarm ? published : published.producer;
+    if (!quote || !/^20\d{2}-\d{2}-\d{2}$/.test(quote.date) || quote.date > koreanDate.format(new Date()) ||
+        quote.date < saved.date || !Number.isInteger(quote.price) ||
         quote.price < 1 || quote.price > Number(price.max)) throw new Error('Invalid quote');
-    showDabomQuote(status, quote);
+    showDabomQuote(status, quote, unit);
     const manualValue = price.value;
     price.defaultValue = String(quote.price);
     price.value = edited ? manualValue : String(quote.price);
     if (!edited) update();
   } catch {
-    status.textContent = `마지막 확인 거래분 ${savedDabomQuote.date} · ${sowMoney.format(savedDabomQuote.price)}원/kg`;
+    showDabomQuote(status, saved, unit, true);
   }
+}
+
+function renderNumberFields(inputs) {
+  return inputs.map(([name, label, unit, value, min, max, step]) => `<label>
+    <span>${label}</span><span class="sow-input-line">
+      <input name="${name}" type="number" inputmode="${step === 1 ? 'numeric' : 'decimal'}"
+        value="${value}" min="${min}" max="${max}" step="${step}" required><small>${unit}</small>
+    </span></label>`).join('');
 }
 
 function renderSowCalculator(isFarm, inputs) {
@@ -232,15 +265,15 @@ function renderSowCalculator(isFarm, inputs) {
       <a href="https://mods.go.kr/board.es?act=view&amp;bid=227&amp;list_no=445127&amp;mid=a10301080600">국가데이터처 순수익·사육비 ↗</a>
     </div>
     <h4 class="picture-group-heading">우리 농장 조건으로 계산하기</h4>`}
-    <p><strong id="sow-dabom-quote" aria-live="polite"></strong><br>다봄 전국 경락가(등외·제주 제외)를 하루 세 차례 확인합니다. 오늘 거래분이 게시되기 전에는 최근 공개 거래분으로 계산합니다. <a href="https://www.ekapepia.com/v3/web/main.do?userGroup=producer">다봄 시세 확인 ↗</a></p>
+    <p><strong id="sow-dabom-quote" aria-live="polite"></strong><br>${isFarm ? '전국 경락가(등외·제주 제외)' : '비육돈 농가수취 산지가격'} 기준입니다. 다봄 시세를 하루 세 차례 확인하며, 오늘 거래분이 게시되기 전에는 최근 공개 거래분으로 계산합니다. <a href="${isFarm ? 'https://www.ekapepia.com/v3/price/auction/period/pig/auctionPrice.do' : 'https://www.ekapepia.com/v3/price/livestock/pig/producer.do'}">다봄 시세 확인 ↗</a></p>
     <form id="sow-form">
-      <div class="sow-inputs">
-        ${inputs.map(([name, label, unit, value, min, max, step]) => `<label>
-          <span>${label}</span><span class="sow-input-line">
-            <input name="${name}" type="number" inputmode="${step === 1 ? 'numeric' : 'decimal'}"
-              value="${value}" min="${min}" max="${max}" step="${step}" required><small>${unit}</small>
-          </span></label>`).join('')}
-      </div>
+      <div class="sow-inputs">${renderNumberFields(inputs)}</div>
+      ${isFarm ? `<fieldset class="farm-cost-fields">
+        <legend>출하 1두당 원가 계산</legend>
+        <p>2025년 전국 조사 평균은 <strong>${sowMoney.format(surveyCost)}원/두</strong>입니다. 아래 항목을 농장 실측값으로 바꾸면 사육비 합계와 손익에 바로 반영됩니다. <a href="https://mods.go.kr/boardDownload.es?bid=227&amp;list_no=445127&amp;seq=3#page=20">국가데이터처 비육돈 사육비 원표 ↗</a></p>
+        <div class="sow-inputs">${renderNumberFields(farmCostInputs)}</div>
+        <p class="farm-cost-note">농구·영농시설비 기본값은 공표된 두 항목의 합계입니다. 원표에서 감가상각만 따로 공표하지 않아 별도 입력 칸의 기본값은 0원입니다. 농장 장부의 감가상각비를 따로 넣을 때는 농구·영농시설비에서 겹치는 금액을 빼세요.</p>
+      </fieldset>` : ''}
       <p id="sow-error" role="status" hidden>빈칸을 채우고 입력 범위와 소수 자릿수를 확인해 주세요.</p>
       <div class="sow-results" aria-live="polite" aria-atomic="true">
         <div class="sow-total"><span>입력 조건 기준 · 연간 예상 손익</span><strong data-sow="profit">—</strong></div>
@@ -250,7 +283,7 @@ function renderSowCalculator(isFarm, inputs) {
         <div><span>연 출하두수 · MSY</span><strong data-sow="msy">—</strong></div>
         <div><span>연 매출 추정</span><strong data-sow="revenue">—</strong></div>
         <div><span>연 사육비 추정</span><strong data-sow="cost">—</strong></div>
-        ${isFarm ? '<div><span>손익분기 경락가</span><strong data-sow="breakEven">—</strong></div>' : ''}
+        ${isFarm ? '<div><span>출하 1두당 사육비 합계</span><strong data-sow="unitCost">—</strong></div><div><span>손익분기 경락가</span><strong data-sow="breakEven">—</strong></div>' : ''}
       </div>
       <button class="course-button" type="reset">기본값으로 돌아가기</button>
     </form>
@@ -260,16 +293,16 @@ function renderSowCalculator(isFarm, inputs) {
         <li>연간 분만 횟수 = 365 ÷ (임신 114일 + 이유일령 + 임신·포유 외 일수). 현재 연 <strong id="sow-litters">—</strong>복.</li>
         <li>연 이유두수 = 연간 분만 횟수 × 복당 이유두수. 연 출하두수 = 연 이유두수 × 이유 후 출하 비율.</li>
         ${isFarm ? '<li>농장 전체 이유·출하두수 = 연평균 모돈 수 × 모돈 1두당 연간 이유·출하두수입니다.</li>' : ''}
-        <li>연 손익 = 연 출하두수 × (평균 도체중 × 경락가 − 출하 1두당 전체 사육비).</li>
+        <li>연 손익 = 연 출하두수 × (${isFarm ? '평균 도체중 × 경락가' : '산지가격 × 출하 생체중 ÷ 110kg'} − 출하 1두당 전체 사육비).</li>
         ${isFarm ? '<li>손익분기 경락가 = 출하 1두당 전체 사육비 ÷ 도체중. 출하가 0두이면 표시하지 않습니다.</li>' : ''}
       </ul>
       <p>번식 기본값은 한돈팜스 PSY 22.4두·MSY 18.9두에 가깝게 맞춘 모델 가정입니다. 임신·포유 외 기간에는 이유 후 교배까지와 번식 지연에 해당하는 기간이 들어갑니다. 이유일령을 바꾸면 분만 횟수가 바뀝니다. 이유두수·출하 비율·사육비에도 변화가 있다면 해당 값을 따로 조정하세요.</p>
-      <p>도체중 88kg은 교육용 가정입니다. 사육비 기본값은 2025년 조사 비육돈 1두당 412,000원입니다. 경락가로 구한 매출은 거래처 정산·수수료를 반영하기 전 추정치입니다. 출하를 기준으로 나눈 농장 전체 사육비를 입력하면 모돈 비용의 이중 계산을 피할 수 있습니다.</p>
+      <p>사육비 기본값은 2025년 전국 조사 비육돈 1두당 ${sowMoney.format(surveyCost)}원입니다. ${isFarm ? '도체중 88kg은 교육용 가정입니다. 경락가로 구한 매출은 거래처 정산·수수료를 반영하기 전 추정치입니다.' : '생체중 110kg이면 표시된 산지가격을 그대로 적용합니다. 다른 체중에서는 무게에 비례해 환산한 추정치입니다.'}</p>
     </details>
   </section>`;
 }
 
-function setupSowCalculator(inputs) {
+function setupSowCalculator(isFarm, inputs) {
   const form = document.querySelector('#sow-form');
   const error = document.querySelector('#sow-error');
   const outputs = form.querySelectorAll('[data-sow]');
@@ -278,11 +311,12 @@ function setupSowCalculator(inputs) {
     const valid = form.checkValidity();
     error.hidden = valid;
     const values = Object.fromEntries(inputs.map(([name]) => [name, form.elements[name].valueAsNumber]));
-    const results = valid ? sowProfit(values) : {};
+    if (isFarm) values.cost = farmCostItems.reduce((total, [name]) => total + form.elements[name].valueAsNumber, 0);
+    const results = valid ? sowProfit(values, isFarm ? 1 : 110) : {};
     for (const output of outputs) {
       const key = output.dataset.sow;
       const isCount = ['psy', 'msy', 'weanedTotal', 'shipped'].includes(key);
-      const unit = isCount ? '두' : key === 'breakEven' ? '원/kg' : '원';
+      const unit = isCount ? '두' : key === 'breakEven' ? '원/kg' : key === 'unitCost' ? '원/두' : '원';
       const format = key === 'psy' || key === 'msy' ? sowNumber : sowMoney;
       output.textContent = valid && results[key] !== null
         ? format.format(results[key]) + unit
@@ -294,7 +328,7 @@ function setupSowCalculator(inputs) {
   form.addEventListener('reset', () => queueMicrotask(update));
   form.addEventListener('submit', event => event.preventDefault());
   update();
-  refreshDabomQuote(form, update);
+  refreshDabomQuote(form, update, isFarm);
 }
 
 const motionObserver = typeof IntersectionObserver === 'function' ? new IntersectionObserver(entries => {
@@ -305,11 +339,26 @@ const motionObserver = typeof IntersectionObserver === 'function' ? new Intersec
   });
 }, { threshold: 0.25 }) : null;
 
+const productTopics = {
+  3: ['시설·환경용 품목 확인', '축사 표면과 설비에 쓸 제품은 허가된 사용 장소를 확인합니다. 온도·환기·가스 문제는 먼저 설비와 분뇨 관리 상태를 점검합니다.'],
+  4: ['사양관리 보조 품목 확인', '영양 보조 품목은 돼지의 성장 단계, 대상 축종, 사료와 중복되는 성분이 있는지 제품 표시를 확인합니다.'],
+  6: ['질병관리용 품목 확인', '담당 수의사와 진단과 적용 여부를 확인한 후 제품별 효능·대상 축종·휴약기간을 확인합니다. 신고 대상이 의심되면 7장의 신고 절차를 따릅니다.'],
+  7: ['세척·소독용 품목 확인', '차량과 도구, 돈방에 적용할 제품은 각각 허가된 용도와 사용 조건을 제품 표시에서 확인합니다.']
+};
+
+function renderProductReferences([title, guidance]) {
+  return `<section class="lesson-block"><h3>${title}</h3><p>${guidance}</p>
+    <div class="product-links">
+      <a class="course-button" href="https://khmass-liturgy.github.io/daehan/" target="_blank" rel="noopener noreferrer">대한가축약품 제품정보 · 로그인 ↗</a>
+      <a class="course-button" href="https://medi.qia.go.kr/" target="_blank" rel="noopener noreferrer">검역본부 품목 허가 조회 ↗</a>
+    </div></section>`;
+}
+
 function renderLesson(index) {
   const chapter = chapters[index];
   const visualChapter = index === 1 || index === 2;
   const farmCalculator = index === 11;
-  const calculatorInputs = farmCalculator ? [farmScaleInput, ...sowInputs] : sowInputs;
+  const calculatorInputs = farmCalculator ? [farmScaleInput, ...sowInputs.filter(([name]) => name !== 'cost')] : productionInputs;
   motionObserver?.disconnect();
   renderNavigation(index);
   lesson.innerHTML = `
@@ -320,6 +369,7 @@ function renderLesson(index) {
     </header>
     ${index === 8 || farmCalculator ? renderSowCalculator(farmCalculator, calculatorInputs) : ''}
     ${visualChapter ? renderVisualChapter(index, chapter) : renderOverview(index, chapter)}
+    ${productTopics[index] ? renderProductReferences(productTopics[index]) : ''}
     <section class="lesson-block"><h3>국내 현장 사례</h3><p>${chapter.case}</p></section>
     <section class="lesson-block"><h3>현장 체크리스트</h3><ul class="course-checks">
       ${chapter.check.map(text => `<li><label><input type="checkbox"> ${text}</label></li>`).join('')}
@@ -343,10 +393,10 @@ function renderLesson(index) {
     <nav class="lesson-actions" aria-label="장 이동">
       ${index > 0 ? `<a class="course-button" href="#chapter-${index}">← 이전 장</a>` : ''}
       <button type="button" class="course-button" id="finish-lesson" aria-pressed="${completed.has(index)}">${completed.has(index) ? '완료 표시 해제' : '학습 완료 표시'}</button>
-      ${index < chapters.length - 1 ? `<a class="course-button next" href="#chapter-${index + 2}">다음 장 →</a>` : '<a class="course-button next" href="#glossary">용어사전 →</a>'}
+      ${index < chapters.length - 1 ? `<a class="course-button next" href="#chapter-${index + 2}">다음 장 →</a>` : '<a class="course-button next" href="#glossary">양돈용어 →</a>'}
     </nav>`;
 
-  if (index === 8 || farmCalculator) setupSowCalculator(calculatorInputs);
+  if (index === 8 || farmCalculator) setupSowCalculator(farmCalculator, calculatorInputs);
   if (motionObserver && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     lesson.querySelectorAll('[data-course-motion]').forEach(figure => motionObserver.observe(figure));
   }
@@ -385,9 +435,16 @@ function showCurrentChapter(scroll) {
 
 function renderGlossary() {
   const query = glossarySearch.value.trim().toLowerCase();
-  const matching = glossary.filter(entry => entry.join(' ').toLowerCase().includes(query));
-  glossaryList.innerHTML = matching.map(([term, meaning]) =>
-    `<div><dt>${term}</dt><dd>${meaning}</dd></div>`).join('');
+  const matching = Object.entries(glossary)
+    .filter(([category]) => !glossaryCategory.value || category === glossaryCategory.value)
+    .flatMap(([category, entries]) => entries.filter(entry => entry.slice(0, 4).join(' ').toLowerCase().includes(query))
+      .map(entry => [category, ...entry]));
+  glossaryList.innerHTML = matching.map(([category, term, meaning, visual, example, icon]) =>
+    `<div class="glossary-card"><dt>${term}<small>${category}</small></dt><dd>
+      <span class="glossary-visual"><svg viewBox="0 0 40 40" aria-hidden="true">${cardIcons[icon]}</svg><strong>${visual}</strong></span>
+      <strong class="glossary-meaning">${meaning}</strong><span class="glossary-example">${example}</span>
+    </dd></div>`).join('');
+  glossaryCount.textContent = `${matching.length}개 용어`;
   glossaryList.hidden = matching.length === 0;
   document.querySelector('#glossary-empty').hidden = matching.length > 0;
 }
@@ -397,7 +454,9 @@ glossaryEmpty.id = 'glossary-empty';
 glossaryEmpty.textContent = '검색 결과가 없습니다.';
 glossaryEmpty.setAttribute('role', 'status');
 glossaryList.after(glossaryEmpty);
+glossaryCategory.insertAdjacentHTML('beforeend', Object.keys(glossary).map(category => `<option>${category}</option>`).join(''));
 glossarySearch.addEventListener('input', renderGlossary);
+glossaryCategory.addEventListener('change', renderGlossary);
 window.addEventListener('hashchange', () => showCurrentChapter(true));
 showCurrentChapter(Boolean(location.hash));
 renderGlossary();

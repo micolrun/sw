@@ -6,18 +6,18 @@
   <meta name="theme-color" content="#173b35">
   <meta name="description" content="양돈산업의 기초부터 스마트축산과 경영 실무까지 배우는 12장 웹 교재">
   <title>양돈 교육과정 | SW 양돈 현장 인사이트</title>
-  <link rel="icon" href="favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=swine">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="course.css?v=visual-lessons">
-  <script src="course-data.js?v=visual-lessons" defer></script>
-  <script src="course.js?v=daily-dabom" defer></script>
+  <link rel="stylesheet" href="course.css?v=glossary-cost">
+  <script src="course-data.js?v=glossary-cost" defer></script>
+  <script src="course.js?v=glossary-cost" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#lesson">본문 바로가기</a>
   <header class="site-header">
     <div class="wrap course-header">
       <a class="course-brand" href="index.html"><span class="brand-icon">SW</span><span>양돈 현장 인사이트</span></a>
-      <nav aria-label="교육과정 바로가기"><a href="#course-outline">목차</a><a href="#glossary">용어사전</a></nav>
+      <nav aria-label="교육과정 바로가기"><a href="#course-outline">목차</a><a href="#glossary">양돈용어</a></nav>
     </div>
   </header>
   <main>
@@ -46,10 +46,13 @@
       <article id="lesson" tabindex="-1" aria-label="선택한 장의 학습 내용"></article>
       <noscript><p>웹 교재를 읽으려면 브라우저에서 자바스크립트를 켜 주세요.</p></noscript>
     </div>
-    <section class="wrap glossary" id="glossary">
-      <h2>용어사전</h2>
-      <label for="glossary-search">용어 또는 뜻 검색</label>
-      <input id="glossary-search" type="search" placeholder="예시: PSY, 이유, 체중">
+    <section class="wrap glossary" id="glossary" aria-labelledby="glossary-title">
+      <h2 id="glossary-title">그림으로 보는 양돈용어</h2>
+      <div class="glossary-controls">
+        <label>용어 또는 뜻 검색<input id="glossary-search" type="search" placeholder="예시: PSY, 이유, 체중"></label>
+        <label>분야 선택<select id="glossary-category"><option value="">전체 분야</option></select></label>
+      </div>
+      <p id="glossary-count" role="status"></p>
       <dl id="glossary-list"></dl>
     </section>
   </main>
