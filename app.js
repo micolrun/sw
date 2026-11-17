@@ -74,3 +74,89 @@ mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', 
   menuToggle.setAttribute('aria-label', '메뉴 열기');
 }));
 renderCards();
+
+const digestButtons = [...document.querySelectorAll('[data-digest-filter]')];
+const digestCards = document.querySelectorAll('[data-digest-topic]');
+digestButtons.forEach(button => button.addEventListener('click', () => {
+  const topic = button.dataset.digestFilter;
+  digestButtons.forEach(option => option.setAttribute('aria-pressed', String(option === button)));
+  digestCards.forEach(card => { card.hidden = topic !== 'all' && card.dataset.digestTopic !== topic; });
+}));
+
+const featuredVideos = [
+  ['j8ybtZXVZG8', '한돈협회 11월 월례브리핑'],
+  ['kMTF36-vyKs', '이유 후 사고를 줄이기 위한 과학적 접근'],
+  ['RQGofjBc90I', '청년 축산인이 만들어가는 스마트축산'],
+  ['iEnN3kvYSSs', '후보돈 관리와 모돈 기록 관리'],
+  ['BkuI13ehqqI', '축산농가에 AI가 들어오면 생기는 변화'],
+  ['yXVJRm4laGY', '이유 후 육성률을 높이는 과제'],
+  ['TWZFHu7cJ3A', '저탄소 농업 프로그램 모바일 이행증빙 가이드']
+];
+const videoDate = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
+const videoTitle = document.querySelector('#daily-video-title');
+const videoStage = document.querySelector('#daily-video');
+const youtubeLink = document.querySelector('#daily-youtube-link');
+let displayedVideoDate;
+
+function featuredVideoForDate(now) {
+  const date = videoDate.format(now);
+  const days = Math.round((Date.parse(date) - Date.UTC(2026, 10, 17)) / 86400000);
+  return featuredVideos[(days % featuredVideos.length + featuredVideos.length) % featuredVideos.length];
+}
+
+function renderDailyVideo() {
+  const now = new Date();
+  const date = videoDate.format(now);
+  if (date === displayedVideoDate || videoStage.querySelector('iframe')) return;
+  displayedVideoDate = date;
+  const [id, title] = featuredVideoForDate(now);
+  videoTitle.textContent = title;
+  youtubeLink.href = `https://www.youtube.com/watch?v=${id}`;
+  videoStage.innerHTML = `<button type="button" class="video-cover" aria-label="${escapeHtml(title)} 재생">
+    <img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy">
+    <span>▶ 영상 재생</span></button>`;
+  videoStage.querySelector('button').addEventListener('click', () => {
+    videoStage.innerHTML = `<iframe title="${escapeHtml(title)}" src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1"
+      allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+    videoStage.querySelector('iframe').focus();
+  });
+}
+
+renderDailyVideo();
+window.setInterval(renderDailyVideo, 60000);
+
+const homeUpdates = [
+  ['핵심 양돈 질병을 그림 용어로 보기', 'course.html?glossary=%EC%A7%88%EB%B3%91#glossary'],
+  ['사료비·인건비를 바꿔 농장 원가 계산', 'course.html#chapter-12'],
+  ['다봄 산지시세로 모돈 한 마리의 손익 계산', 'course.html#chapter-9'],
+  ['피그앤포크 한돈뉴스 주요 기사 요약', '#news'],
+  ['오늘의 한돈TV 영상 보기', '#daily-show']
+];
+const updatesBar = document.querySelector('.updates-bar');
+const updateLink = document.querySelector('#update-link');
+const updateToggle = document.querySelector('#update-toggle');
+const updateNext = document.querySelector('#update-next');
+let updateIndex = 0;
+let updatesPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function showNextUpdate() {
+  updateIndex = (updateIndex + 1) % homeUpdates.length;
+  const [label, href] = homeUpdates[updateIndex];
+  updateLink.href = href;
+  updateLink.innerHTML = `<span class="updates-slide">${label}</span><span aria-hidden="true"> →</span>`;
+}
+
+function showUpdateToggle() {
+  updateToggle.textContent = updatesPaused ? '재생' : '멈춤';
+  updateToggle.setAttribute('aria-label', updatesPaused ? '업데이트 자동 전환 시작' : '업데이트 자동 전환 멈춤');
+}
+
+updateToggle.addEventListener('click', () => {
+  updatesPaused = !updatesPaused;
+  showUpdateToggle();
+});
+updateNext.addEventListener('click', showNextUpdate);
+showUpdateToggle();
+window.setInterval(() => {
+  if (!updatesPaused && !updatesBar.matches(':hover, :focus-within')) showNextUpdate();
+}, 8000);

@@ -445,6 +445,7 @@ function renderGlossary() {
       <strong class="glossary-meaning">${meaning}</strong><span class="glossary-example">${example}</span>
     </dd></div>`).join('');
   glossaryCount.textContent = `${matching.length}개 용어`;
+  document.querySelector('#glossary-disease-note').hidden = glossaryCategory.value !== '질병';
   glossaryList.hidden = matching.length === 0;
   document.querySelector('#glossary-empty').hidden = matching.length > 0;
 }
@@ -455,6 +456,8 @@ glossaryEmpty.textContent = '검색 결과가 없습니다.';
 glossaryEmpty.setAttribute('role', 'status');
 glossaryList.after(glossaryEmpty);
 glossaryCategory.insertAdjacentHTML('beforeend', Object.keys(glossary).map(category => `<option>${category}</option>`).join(''));
+const linkedCategory = new URLSearchParams(location.search).get('glossary');
+if (Object.hasOwn(glossary, linkedCategory)) glossaryCategory.value = linkedCategory;
 glossarySearch.addEventListener('input', renderGlossary);
 glossaryCategory.addEventListener('change', renderGlossary);
 window.addEventListener('hashchange', () => showCurrentChapter(true));
