@@ -148,7 +148,7 @@
   pointer-events: none;
   animation: none;
 }
-#growth-picker {
+#growth-picker, #sow-cycle-picker {
   position: absolute;
   inset: -9px -22px;
   width: calc(100% + 44px);
@@ -170,44 +170,38 @@
   background: #fff;
   scroll-margin-top: 90px;
 }
-.sow-cycle {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 14px;
-  list-style: none;
-  padding: 0;
-  margin: 0 0 14px;
+.sow-visual {
+  padding-block: 18px 22px;
+  overflow-x: auto;
 }
-.sow-cycle li { position: relative; }
-.sow-cycle li:not(:last-child)::after {
-  content: '→';
-  position: absolute;
-  top: 50%;
-  right: -13px;
-  transform: translateY(-50%);
-  font-size: 12px;
-  color: #486d59;
-  pointer-events: none;
+.sow-timeline {
+  position: relative;
+  min-width: 650px;
 }
-.sow-cycle button {
-  width: 100%;
-  height: 100%;
-  min-height: 66px;
-  padding: 8px 5px;
-  border: 1px solid #c9dbcc;
-  border-radius: 10px;
-  background: #f5f8f3;
-  color: var(--ink);
-  font-size: 14px;
-  font-weight: 800;
+.sow-cycle { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.sow-timeline .growth-track {
+  inset-inline: calc(100% / 14);
+  top: 28.5px;
 }
-.sow-cycle button span { display: block; font-size: 11px; font-weight: 600; }
-.sow-cycle button[aria-pressed="true"] { background: #246047; color: #fff; border-color: #246047; }
-.sow-cycle button[aria-pressed="false"]:hover { background: #e8f3e9; }
+.sow-timeline .growth-traveler { z-index: 3; }
+#sow-cycle-picker {
+  appearance: none;
+  z-index: 4;
+}
+#sow-cycle-picker::-webkit-slider-thumb {
+  appearance: none;
+  width: 44px;
+  height: 44px;
+}
+#sow-cycle-picker::-moz-range-thumb {
+  width: 44px;
+  height: 44px;
+  border: 0;
+}
+.sow-cycle .growth-dot { pointer-events: none; }
+.sow-cycle [data-selected] strong { color: #246047; text-decoration: underline; text-underline-offset: 3px; }
 .sow-cycle-note { margin: 12px 0 0; font-size: 12px; color: #486655; }
 .sow-cycle-note a { text-decoration: underline; text-underline-offset: 2px; }
-@media (max-width: 820px) { .sow-cycle { grid-template-columns: repeat(4, minmax(0, 1fr)); } .sow-cycle li:nth-child(4)::after { content: none; } }
-@media (max-width: 480px) { .sow-cycle { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sow-cycle li:nth-child(even)::after { content: none; } }
 
 @media (max-width: 520px) {
   .growth-visual { --growth-padding: 8px; }

@@ -82,9 +82,10 @@
 })();
 
 (() => {
-  const buttons = [...document.querySelectorAll('.sow-cycle button')];
+  const picker = document.querySelector('#sow-cycle-picker');
   const care = document.querySelector('#sow-cycle-care');
-  if (!care || !buttons.length) return;
+  if (!picker || !care) return;
+  const stages = [...document.querySelectorAll('.sow-cycle li')];
 
   const points = [
     ['분만', '모돈이 자돈을 낳는 시기입니다. 분만 시작 시각과 태어난 자돈 수를 기록하고, 자돈의 보온과 초유 섭취를 확인하세요.'],
@@ -96,11 +97,19 @@
     ['다음 분만 · 새 주기의 시작', '분만 예정일을 확인하고 깨끗한 분만 공간과 자돈 보온 구역을 준비하세요. 자돈이 태어나면 분만 기록을 남기고 다시 포유 단계로 들어갑니다.']
   ];
 
-  buttons.forEach((button, index) => button.addEventListener('click', () => {
+  function render() {
+    const index = picker.valueAsNumber;
     const [stage, advice] = points[index];
-    buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    picker.parentElement.style.setProperty('--growth-position', (index / Number(picker.max) * 100) + '%');
+    picker.setAttribute('aria-valuetext', stage);
+    stages.forEach((item, i) => item.toggleAttribute('data-selected', i === index));
     const heading = document.createElement('strong');
     heading.textContent = stage;
     care.replaceChildren(heading, advice);
-  }));
+  }
+  picker.addEventListener('input', render);
+  picker.addEventListener('change', () => {
+    stages[picker.valueAsNumber].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  });
+  render();
 })();

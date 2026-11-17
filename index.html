@@ -10,10 +10,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=sow-cycle">
+  <link rel="stylesheet" href="styles.css?v=sow-timeline">
   <script src="app.js?v=handon" defer></script>
   <script src="daily-pig.js?v=2" defer></script>
-  <script src="growth-simulator.js?v=7" defer></script>
+  <script src="growth-simulator.js?v=8" defer></script>
   <script src="farm-weather.js?v=1" defer></script>
 </head>
 <body>
@@ -94,18 +94,27 @@
 
       <section class="sow-journey" aria-labelledby="sow-cycle-title">
         <div class="growth-heading">
-          <div><h2 id="sow-cycle-title">한눈에 보는 모돈의 생산주기</h2><p>분만부터 다음 분만까지, 단계를 선택해 시기와 관리 포인트를 확인하세요.</p></div>
+          <div><h2 id="sow-cycle-title">한눈에 보는 모돈의 생산주기</h2><p>분만부터 다음 분만까지 이어지는 과정입니다.</p></div>
           <a class="text-link" href="course.html#chapter-6">번식관리 자세히 보기 <span aria-hidden="true">↗</span></a>
         </div>
-        <ol class="sow-cycle" aria-label="모돈의 생산주기 단계">
-          <li><button type="button" aria-pressed="true" aria-controls="sow-cycle-care">분만<span>주기의 시작</span></button></li>
-          <li><button type="button" aria-pressed="false" aria-controls="sow-cycle-care">포유<span>약 3~4주</span></button></li>
-          <li><button type="button" aria-pressed="false" aria-controls="sow-cycle-care">이유<span>젖을 떼는 날</span></button></li>
-          <li><button type="button" aria-pressed="false" aria-controls="sow-cycle-care">발정<span>이유 후 약 4~6일</span></button></li>
-          <li><button type="button" aria-pressed="false" aria-controls="sow-cycle-care">종부<span>발정 확인 후</span></button></li>
-          <li><button type="button" aria-pressed="false" aria-controls="sow-cycle-care">임신<span>종부 후 평균 114일</span></button></li>
-          <li><button type="button" aria-pressed="false" aria-controls="sow-cycle-care">다음 분만<span>다시 포유로</span></button></li>
-        </ol>
+        <div class="growth-visual sow-visual">
+          <div class="sow-timeline">
+            <div class="growth-track">
+              <span class="growth-track-fill" aria-hidden="true"></span><span class="growth-traveler" aria-hidden="true">🐽</span>
+              <input id="sow-cycle-picker" type="range" min="0" max="6" step="1" value="0" aria-label="모돈 생산주기 단계" aria-valuetext="분만" aria-controls="sow-cycle-care" aria-describedby="sow-cycle-help">
+            </div>
+            <ol class="growth-stages sow-cycle" aria-label="모돈의 생산주기 순서">
+              <li><span class="growth-age">주기의 시작</span><span class="growth-dot newborn"></span><strong>분만</strong><small>분만 기록 · 초유</small></li>
+              <li><span class="growth-age">약 3~4주</span><span class="growth-dot newborn"></span><strong>포유</strong><small>급수 · 급이</small></li>
+              <li><span class="growth-age">젖을 떼는 날</span><span class="growth-dot weaning"></span><strong>이유</strong><small>자돈 분리 · 기록</small></li>
+              <li><span class="growth-age">이유 후 약 4~6일</span><span class="growth-dot weaning"></span><strong>발정</strong><small>발정 징후 확인</small></li>
+              <li><span class="growth-age">발정 확인 후</span><span class="growth-dot grower"></span><strong>종부</strong><small>교배 · 인공수정</small></li>
+              <li><span class="growth-age">평균 114일</span><span class="growth-dot finisher"></span><strong>임신</strong><small>임신 확인 · 체형</small></li>
+              <li><span class="growth-age">분만 예정일 무렵</span><span class="growth-dot finisher"></span><strong>다음 분만</strong><small>다시 포유로</small></li>
+            </ol>
+          </div>
+        </div>
+        <p id="sow-cycle-help" class="growth-picker-help">돼지코를 드래그하거나 방향키로 옮기면 단계별 관리 포인트가 표시됩니다.</p>
         <p id="sow-cycle-care" class="growth-care" aria-live="polite" aria-atomic="true"><strong>분만</strong> 모돈이 자돈을 낳는 시기입니다. 분만 시작 시각과 태어난 자돈 수를 기록하고, 자돈의 보온과 초유 섭취를 확인하세요.</p>
         <p class="sow-cycle-note">포유 28일, 이유 후 발정과 종부까지 약 5일, 임신 114일을 가정하면 분만에서 다음 분만까지 약 147일입니다. 실제 주기는 농장과 개체에 따라 달라집니다. <a href="https://ebook.qia.go.kr/src/viewer/main.php?category=1&amp;host=main&amp;page=23&amp;site=20220228_150245" target="_blank" rel="noopener noreferrer">검역본부 주간관리 예시 ↗</a></p>
       </section>
