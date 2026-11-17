@@ -97,3 +97,19 @@
 .care-scene{height:175px;background:linear-gradient(#ffffff14,#214f2524),url('assets/farm-scene-v2.png') center/cover no-repeat!important}
 .care-scene .care-hill,.care-scene .care-sun{display:none}.care-scene img,.care-suckling .care-scene img,.care-nursery .care-scene img{height:145px;width:94%;object-fit:contain;filter:drop-shadow(0 8px 5px #47392855)}.care-scene .care-object{right:8%;bottom:13px;font-size:22px}
 @media(max-width:600px){.lab-world img{width:245px;max-height:180px}.care-scene{height:140px}.care-scene img,.care-suckling .care-scene img,.care-nursery .care-scene img{height:115px}}
+
+.pig-stage-illustrated .pig-illustration {
+  object-fit: contain;
+  transform: translateY(var(--pig-rise, 0)) rotate(var(--pig-tilt, 0deg)) scaleY(var(--pig-posture, 1));
+  transform-origin: center 86%;
+}
+.pig-stage-illustrated[data-mood=tired] { --pig-rise: 7px; --pig-tilt: -6deg; --pig-posture: .94; }
+.pig-stage-illustrated[data-mood=cough] { --pig-tilt: -4deg; --pig-posture: .97; }
+.pig-stage-illustrated[data-mood=water],
+.pig-stage-illustrated[data-mood=feed] { --pig-tilt: 5deg; }
+@media (prefers-reduced-motion: no-preference) {
+  .pig-stage-illustrated .pig-illustration { animation: hero-pig-breathe 4.2s ease-in-out 1; }
+  @keyframes hero-pig-breathe {
+    50% { transform: translateY(calc(var(--pig-rise, 0px) - 7px)) rotate(var(--pig-tilt, 0deg)) scaleY(calc(var(--pig-posture, 1) + .025)); }
+  }
+}
