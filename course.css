@@ -89,6 +89,39 @@
 .reference-routes li{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:750;border-radius:7px;padding:5px 9px;background:#f2f5f0}
 .reference-routes li::before{content:'';width:15px;height:4px;background:var(--route);border-radius:4px}
 .course-details .course-figure:first-of-type{margin-top:14px}
+.course-details>p:first-of-type{margin-top:14px}
+.visual-lesson .course-figure figcaption{font-size:20px}
+.visual-lesson .course-flow li{font-size:16px;padding:9px 11px}
+.visual-lesson .course-chart li{grid-template-columns:40px 1fr 45px;font-size:16px}
+.visual-lesson .bar-track{height:17px}
+.sow-benchmark{padding:15px 17px;background:#edf5eb;border:1px solid #cce0ce;border-radius:12px}
+.sow-benchmark>strong{display:block;font-size:clamp(19px,3vw,27px);letter-spacing:-.04em}
+.sow-benchmark p{margin:5px 0 8px}
+.sow-calculator a{color:#245a45;text-decoration:underline;text-underline-offset:3px}
+.sow-benchmark a{display:inline-block;margin-right:12px;font-size:13px}
+.sow-inputs,.sow-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}
+.sow-inputs label,.sow-results>div{display:grid;gap:5px;padding:11px 12px;background:#f3f7f2;border:1px solid #dce8dc;border-radius:9px}
+.sow-inputs label>span:first-child,.sow-results span{font-size:14px;font-weight:750}
+.sow-input-line{display:flex;align-items:center;gap:8px}
+.sow-input-line small{white-space:nowrap;color:#34534a;font-size:13px}
+.sow-input-line input{color:var(--ink);min-width:0;width:100%;border:1px solid #a8bcaa;border-radius:6px;background:white;padding:7px;font-size:18px;font-weight:750}
+.sow-results strong{font-size:clamp(17px,3vw,22px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.sow-results .sow-total{grid-column:1/-1;background:#173b35;color:white;padding:14px 15px}
+.sow-total strong{font-size:clamp(27px,5vw,40px)}
+.sow-method{margin-top:14px;padding:10px 12px;border:1px solid #dce8dc;border-radius:9px}
+.sow-method summary{cursor:pointer;font-weight:750}
+.sow-method li,.sow-method p{font-size:14px}
+#sow-error{color:#9c2e23}
+@media (prefers-reduced-motion:no-preference){
+  .course-motion-active .picture-card{animation:course-card-rise .4s ease-out calc(var(--step) * 55ms) both}
+  .course-motion-active .course-flow li{animation:course-flow-step .52s ease-out calc(var(--step) * 135ms) both}
+  .course-motion-active .bar-track i{transform-origin:left;animation:course-grow-bar .65s ease-out both}
+  .course-motion-active .course-chart li:nth-child(2) i{animation-delay:100ms}
+  .course-motion-active .course-chart li:nth-child(3) i{animation-delay:200ms}
+}
+@keyframes course-card-rise{from{transform:translateY(6px)}to{transform:translateY(0)}}
+@keyframes course-flow-step{from{background-color:#cce6d5}to{background-color:#fff}}
+@keyframes course-grow-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .lesson-actions{display:flex;flex-wrap:wrap;gap:8px}
 .course-button{display:inline-flex;align-items:center;background:white;border:1px solid #a8bcaa;border-radius:8px;padding:8px 12px;color:var(--ink);font-size:13px;font-weight:750}
 .course-button:hover{background:#eaf3e7}
@@ -112,6 +145,9 @@
   .picture-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .picture-card{padding:12px 9px}
   .picture-card svg{width:46px;height:46px}
+  .sow-inputs label,.sow-results>div{padding:9px 7px}
+  .sow-input-line{gap:4px}
+  .sow-input-line input{font-size:16px;padding:6px 3px}
 }
 @media print{
   .site-header,.course-hero,.course-sidebar,.glossary,.footer,.skip-link,.lesson-actions,.lesson-block:not(.lesson-summary),#print-summary{display:none}
